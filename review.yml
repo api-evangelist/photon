@@ -1,0 +1,130 @@
+aid: photon
+name: Photon
+review:
+  question: Does Photon Health expose a documented public healthcare API, and is it FHIR or GraphQL?
+  answer: true
+  date: '2026-07-24'
+  reviewer: API Evangelist
+  homeMarket: United States
+  tier: pharmacy
+findings:
+  summary: |
+    Photon Health publishes a live, self-serve developer portal at
+    https://docs.photon.health (HTTP 200) documenting a native GraphQL
+    e-prescribing platform - NOT an HL7 FHIR interface. The surface is a
+    single GraphQL endpoint (POST /graphql) at
+    https://clinical-api.photon.health/graphql (production; audience
+    https://api.photon.health also exposes /graphql) with a sandbox on
+    neutron.health (https://clinical-api.neutron.health/graphql). The
+    endpoint permits unauthenticated schema introspection, so the full
+    GraphQL schema (105 named types, Query + Mutation) was harvested verbatim.
+    Documented product APIs: the Clinical API (patients, prescriptions,
+    orders, pharmacies, treatment/medication catalog, drug-drug/drug-allergy
+    screening, webhooks, org/user admin) and the Patient Benefits API
+    (benefit checks / coverage). Photon Elements provides prebuilt
+    WebComponent prescribing UI (not modeled as an API).
+  developerPortal:
+    url: https://docs.photon.health/
+    status: 200
+    confirmed: true
+  apiReference:
+    url: https://docs.photon.health/reference/clinical-api
+    status: 200
+  fhir:
+    capabilityStatement: false
+    smartConfiguration: false
+    note: |
+      Photon is NOT a FHIR server. https://api.photon.health/.well-known/smart-configuration
+      returns 403 and no <base>/metadata CapabilityStatement is served. The
+      machine-readable contract is a GraphQL schema, harvested via introspection.
+    usCore: false
+    daVinci: false
+    carin: false
+  specsHarvested:
+    count: 1
+    specs:
+      - type: GraphQL Introspection Schema
+        path: graphql/photon-clinical-api-schema.json
+        provenance: >-
+          POST https://clinical-api.photon.health/graphql with a standard
+          IntrospectionQuery on 2026-07-24 (HTTP 200, unauthenticated).
+          Saved verbatim; 105 named types.
+    openapi: false
+    downloadableOpenAPI: false
+  auth:
+    model: OAuth2 client-credentials (Auth0)
+    smartOnFhir: false
+    tokenEndpointProduction: https://auth.photon.health/oauth/token
+    tokenEndpointSandbox: https://auth.neutron.health/oauth/token
+    audienceProduction: https://api.photon.health
+    audienceSandbox: https://api.neutron.health
+    tokenTypes:
+      - Machine-to-Machine (backend)
+      - User Access Token (frontend)
+    scopesObserved:
+      - read:patient
+      - write:patient
+      - read:prescription
+      - write:prescription
+      - read:order
+      - write:order
+    openidConfiguration: https://auth.photon.health/.well-known/openid-configuration
+    note: >-
+      OpenID configuration is Auth0-hosted; grant_types_supported includes
+      client_credentials. write:prescription is restricted to authorized providers.
+  accessPosture:
+    gated: false
+    selfServe: true
+    sandbox: https://app.neutron.health
+    note: >-
+      Self-serve onboarding at https://photonhealth.com/onboard; sandbox on
+      neutron.health. Full write/prescribing capabilities require an authorized
+      provider and organization setup.
+  transports:
+    - protocol: GraphQL
+      scheme: https
+      baseURL: https://clinical-api.photon.health/graphql
+      documented: true
+    - protocol: GraphQL
+      scheme: https
+      baseURL: https://api.photon.health/graphql
+      documented: true
+      note: Audience/gateway host; requires authorization (401 unauthenticated).
+    - protocol: Webhooks
+      scheme: https
+      documented: true
+      note: Order Events delivered via configurable webhooks (WebhookConfig); not WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented.
+  standardsConformance:
+    fhir: false
+    hl7: false
+    note: >-
+      Photon does not conform to US Core / Da Vinci / CARIN FHIR implementation
+      guides; it is a proprietary GraphQL model. It interoperates with the
+      pharmacy/e-prescribing ecosystem (Surescripts-style routing) at the
+      product level rather than via published FHIR profiles.
+sources:
+  - url: https://docs.photon.health/
+    type: DeveloperPortal
+    note: Live docs portal (HTTP 200); GraphQL e-prescribing platform.
+  - url: https://docs.photon.health/reference/clinical-api
+    type: APIReference
+    note: Clinical API GraphQL reference.
+  - url: https://docs.photon.health/reference/patient-benefits-api
+    type: APIReference
+    note: Patient Benefits API (benefit checks / coverage), GraphQL.
+  - url: https://docs.photon.health/docs/authentication
+    type: Documentation
+    note: OAuth2 client-credentials, token endpoints, audiences, scopes.
+  - url: https://auth.photon.health/.well-known/openid-configuration
+    type: WellKnown
+    note: Auth0-hosted OpenID configuration (HTTP 200); client_credentials supported.
+  - url: https://clinical-api.photon.health/graphql
+    type: GraphQL
+    note: Introspection returned HTTP 200; full schema harvested verbatim.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

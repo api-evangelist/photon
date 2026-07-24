@@ -1,0 +1,116 @@
+aid: photon
+url: https://raw.githubusercontent.com/api-evangelist/photon/refs/heads/main/apis.yml
+name: Photon
+kind: company
+description: >-
+  Photon Health is a United States prescription-infrastructure and e-prescribing
+  (eRx) platform that lets digital-health companies embed prescribing, pharmacy
+  selection, prescription routing, and fulfillment tracking into their clinical
+  applications. Rather than an HL7 FHIR interface, Photon exposes a native
+  GraphQL Clinical API - a single POST /graphql endpoint covering patients,
+  prescriptions, orders, pharmacies, the medication/treatment catalog, drug-drug
+  and drug-allergy screening, webhooks, and organization/user administration -
+  plus a Patient Benefits API for pharmacy benefit checks and coverage. It also
+  ships Photon Elements, prebuilt WebComponent UI for prescribing. The API is
+  secured with OAuth2 client-credentials (Auth0) using machine-to-machine and
+  user access tokens and prescription/order scopes; a sandbox runs on
+  neutron.health. Photon serves prescribers and pharmacy-innovation partners
+  including Amazon Pharmacy, Sesame, WeightWatchers, and Found.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Healthcare
+- United States
+- e-Prescribing
+- Pharmacy
+- Prescription Routing
+- GraphQL
+- Clinical API
+- Digital Health
+- Benefit Check
+- OAuth2
+created: '2026-07-24'
+modified: '2026-07-24'
+specificationVersion: '0.19'
+apis:
+- aid: photon:photon-clinical-api
+  name: Photon Clinical API
+  description: >-
+    Photon's native GraphQL Clinical API for managing patients, prescriptions,
+    orders, pharmacies, the treatment/medication catalog, drug-drug and
+    drug-allergy interaction screening, webhooks, and organization/user
+    administration. A single POST /graphql endpoint secured with OAuth2
+    client-credentials (Auth0) bearer tokens. Schema harvested verbatim via
+    unauthenticated GraphQL introspection.
+  humanURL: https://docs.photon.health/reference/clinical-api
+  baseURL: https://clinical-api.photon.health/graphql
+  tags:
+  - GraphQL
+  - e-Prescribing
+  - Pharmacy
+  properties:
+  - type: GraphQL
+    url: graphql/photon-clinical-api-schema.json
+  - type: Documentation
+    url: https://docs.photon.health/docs/getting-started
+  - type: APIReference
+    url: https://docs.photon.health/reference/clinical-api
+  - type: Authentication
+    url: https://docs.photon.health/docs/authentication
+  - type: Documentation
+    url: https://docs.photon.health/docs/order-events
+  - type: Documentation
+    url: https://docs.photon.health/docs/using-ddi-and-dai
+- aid: photon:photon-patient-benefits-api
+  name: Photon Patient Benefits API
+  description: >-
+    Photon's GraphQL Patient Benefits API for managing patient benefits and
+    enabling pharmacy benefit checks (coverage options, copay, and formulary)
+    during the prescribing workflow. Served over the same GraphQL endpoint via
+    mutations such as createBenefit and generateCoverageOptions.
+  humanURL: https://docs.photon.health/reference/patient-benefits-api
+  baseURL: https://clinical-api.photon.health/graphql
+  tags:
+  - GraphQL
+  - Benefit Check
+  - Coverage
+  properties:
+  - type: GraphQL
+    url: graphql/photon-clinical-api-schema.json
+  - type: Documentation
+    url: https://docs.photon.health/docs/benefit-check-documentation
+  - type: APIReference
+    url: https://docs.photon.health/reference/patient-benefits-api
+  - type: Authentication
+    url: https://docs.photon.health/docs/authentication
+common:
+- type: Website
+  url: https://photonhealth.com/
+- type: DeveloperPortal
+  url: https://docs.photon.health/
+- type: Documentation
+  url: https://docs.photon.health/docs/getting-started
+- type: APIReference
+  url: https://docs.photon.health/reference/clinical-api
+- type: GettingStarted
+  url: https://docs.photon.health/docs/getting-started
+- type: Authentication
+  url: https://docs.photon.health/docs/authentication
+- type: SignUp
+  url: https://photonhealth.com/onboard
+- type: GitHubOrganization
+  url: https://github.com/Photon-Health
+- type: LinkedIn
+  url: https://www.linkedin.com/company/photonhealth
+- type: StatusPage
+  url: https://status.photon.health
+- type: TrustCenter
+  url: https://trust.photon.health
+- type: Blog
+  url: https://photonhealth.com/blog
+- type: PrivacyPolicy
+  url: https://photonhealth.com/privacy
+- type: TermsOfService
+  url: https://photonhealth.com/terms
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
