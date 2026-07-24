@@ -1,0 +1,34 @@
+generated: '2026-07-24'
+method: searched
+source: https://docs.photon.health/docs/elements + npm @photonhealth/elements
+product: Photon Elements
+description: >-
+  Photon Elements is a collection of prebuilt, customizable, framework-agnostic
+  WebComponents that embed prescribing functionality directly into any
+  web-based clinical tool. Elements work across React, Vue, and Angular.
+loaders:
+- registry: npm
+  name: "@photonhealth/elements"
+  version: 0.23.11
+  install: npm install @photonhealth/elements
+  cdn: https://cdn.jsdelivr.net/npm/@photonhealth/elements
+- registry: npm
+  name: "@photonhealth/react"
+  version: 1.0.19
+  install: npm install @photonhealth/react
+  note: React bindings (PhotonProvider / PhotonClient) around the SDK + Elements.
+component_families:
+- family: Prescribing
+  note: WebComponents for composing prescriptions and launching the prescribe flow.
+- family: Patient
+  note: Patient selection / management surfaces.
+- family: Pharmacy
+  note: Pharmacy selection surfaces used during ordering.
+- family: Provider auth
+  note: User access token acquisition (Elements are the recommended path for user tokens / write:prescription).
+auth:
+  note: >-
+    Elements handle user access token acquisition on the frontend; only
+    authorized providers receive write:prescription through this path.
+docs: https://docs.photon.health/docs/elements
+demo: https://github.com/Photon-Health/react-elements-demo

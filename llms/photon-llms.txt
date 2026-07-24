@@ -1,0 +1,24 @@
+# Photon Health Documentation
+
+> Documentation for Photon Health
+
+## Guides
+- [Getting Started](https://docs.photon.health/docs/getting-started.md)
+- [Integration Guide](https://docs.photon.health/docs/integration-guide.md)
+- [Migration Guide](https://docs.photon.health/docs/integration-guide-1.md)
+- [DoseSpot Migration Guide](https://docs.photon.health/docs/dosespot.md)
+- [MDToolbox Migration Guide](https://docs.photon.health/docs/mdtoolbox.md)
+- [Elements](https://docs.photon.health/docs/elements.md)
+- [Authentication](https://docs.photon.health/docs/authentication.md)
+- [Order Events](https://docs.photon.health/docs/order-events.md)
+- [Sync Patients](https://docs.photon.health/docs/sync-patients.md)
+- [Sync Allergies](https://docs.photon.health/docs/sync-allergies.md): Optional integration for enabling allergy screening
+- [Sync Medication History](https://docs.photon.health/docs/sync-medication-history.md): Optional integration to enable drug-drug interaction screening for historical medications
+- [Screen for Drug/Drug or Drug/Allergy Interactions](https://docs.photon.health/docs/using-ddi-and-dai.md): Optional integration to enable drug-drug interaction screening for historical medications
+- [Benefit Checks](https://docs.photon.health/docs/benefit-check-documentation.md): View estimated out-of-pocket costs, alternative medications, pharmacy dispensing options, and insurance coverage details
+- [Order & Rx Status Guide](https://docs.photon.health/docs/order-rx-status-retail-pharmacycourier-delivery.md): This guide explains the different status indicators you'll see when tracking your orders in our web app.
+
+## API Reference
+- [Clinical API](https://docs.photon.health/reference/clinical-api.md)
+- [Patient Benefits API](https://docs.photon.health/reference/patient-benefits-api.md)
+- [Benefits Test Data](https://docs.photon.health/reference/patient-benefits-test-data.md)

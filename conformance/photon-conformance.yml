@@ -1,0 +1,32 @@
+generated: '2026-07-24'
+method: derived
+source: graphql/photon-clinical-api-schema.json + docs.photon.health
+standards:
+- id: oauth2
+  conforms: true
+  evidence: OAuth2 client-credentials access tokens via Auth0 (docs/authentication + openid-configuration).
+- id: oidc
+  conforms: true
+  evidence: Auth0 /.well-known/openid-configuration served (HTTP 200); issuer https://auth.photon.health/.
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server served (HTTP 200).
+- id: graphql
+  conforms: true
+  evidence: Single POST /graphql endpoint; introspection returns a full schema (105 named types, Query + Mutation).
+- id: cloudevents-1.0
+  conforms: true
+  evidence: Order-event webhooks use the CloudEvents 1.0 envelope (specversion 1.0, datacontenttype, subject, source, data).
+- id: fhir-r4
+  conforms: false
+  evidence: Not a FHIR server; api.photon.health/.well-known/smart-configuration returns 403 and no CapabilityStatement is served.
+- id: smart-on-fhir
+  conforms: false
+  evidence: SMART discovery refused; proprietary GraphQL auth/data model instead.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: GraphQL uses the spec errors[] array (extensions.code), not application/problem+json.
+notes: >-
+  Photon interoperates with the pharmacy / e-prescribing ecosystem
+  (Surescripts-style routing) at the product level, not via published FHIR
+  implementation guides (US Core / Da Vinci / CARIN are all absent).

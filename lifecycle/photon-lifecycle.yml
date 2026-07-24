@@ -1,0 +1,25 @@
+generated: '2026-07-24'
+method: searched
+source: docs.photon.health + status.photon.health + GraphQL schema introspection
+versioning:
+  scheme: schema-evolution
+  current: unversioned
+  note: >-
+    The Clinical API is a single unversioned GraphQL endpoint; evolution is
+    handled additively at the schema level (new types/fields) with GraphQL
+    deprecation on fields (isDeprecated / deprecationReason) rather than URL or
+    header versioning. No date/header API version is documented.
+deprecation:
+  mechanism: graphql-field-deprecation
+  sunset_header: false
+  note: Deprecations are surfaced per field via GraphQL isDeprecated + deprecationReason in introspection.
+status_page: https://status.photon.health
+migration_guides:
+- https://docs.photon.health/docs/integration-guide-1
+- https://docs.photon.health/docs/dosespot
+- https://docs.photon.health/docs/mdtoolbox
+deprecated_operations: []
+notes: >-
+  Migration guides exist for onboarding off DoseSpot and MDToolbox. Introspection
+  on 2026-07-24 found no fields flagged isDeprecated. No public SLA/uptime target
+  document was found beyond the live status page.

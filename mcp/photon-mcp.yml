@@ -1,0 +1,58 @@
+generated: '2026-07-24'
+method: derived
+status: candidate
+source: graphql/photon-clinical-api-schema.json
+note: >-
+  No official hosted Photon MCP server was found (checked docs, the Photon-Health
+  GitHub org, and MCP registries as of 2026-07-24). The tools below are a
+  candidate surface derived one-per-field from the harvested GraphQL Query and
+  Mutation types; each tool's real input contract is that field's GraphQL
+  arguments in graphql/photon-clinical-api-schema.json. Not a published server.
+server:
+  name: photon-clinical-api
+  transport: http
+  backing_endpoint: https://clinical-api.photon.health/graphql
+  auth: OAuth2 client-credentials (Auth0) Bearer token
+tools:
+- name: get_patient
+  description: Fetch a patient by id.
+  source_field: graphql/photon-clinical-api-schema.json#Query.patient
+- name: list_patients
+  description: List/search patients.
+  source_field: graphql/photon-clinical-api-schema.json#Query.patients
+- name: create_patient
+  description: Create a patient record.
+  source_field: graphql/photon-clinical-api-schema.json#Mutation.createPatient
+- name: get_order
+  description: Fetch an order by id.
+  source_field: graphql/photon-clinical-api-schema.json#Query.order
+- name: list_orders
+  description: List orders.
+  source_field: graphql/photon-clinical-api-schema.json#Query.orders
+- name: reroute_order
+  description: Reroute an order to a different pharmacy.
+  source_field: graphql/photon-clinical-api-schema.json#Mutation.rerouteOrder
+- name: resend_order
+  description: Resend an order to its pharmacy.
+  source_field: graphql/photon-clinical-api-schema.json#Mutation.resendOrder
+- name: screen_prescription
+  description: Run drug-drug / drug-allergy interaction screening.
+  source_field: graphql/photon-clinical-api-schema.json#Query.prescriptionScreen
+- name: list_pharmacies
+  description: Search pharmacies for routing.
+  source_field: graphql/photon-clinical-api-schema.json#Query.pharmacies
+- name: get_treatment_options
+  description: Query the treatment/medication catalog.
+  source_field: graphql/photon-clinical-api-schema.json#Query.treatmentOptions
+- name: generate_coverage_options
+  description: Generate benefit coverage options for a patient (Patient Benefits API).
+  source_field: graphql/photon-clinical-api-schema.json#Mutation.generateCoverageOptions
+- name: create_benefit
+  description: Create a patient benefit (Patient Benefits API).
+  source_field: graphql/photon-clinical-api-schema.json#Mutation.createBenefit
+- name: create_webhook_config
+  description: Register a webhook endpoint for order events.
+  source_field: graphql/photon-clinical-api-schema.json#Mutation.createWebhookConfig
+- name: list_webhooks
+  description: List configured webhook endpoints.
+  source_field: graphql/photon-clinical-api-schema.json#Query.webhooks

@@ -1,0 +1,38 @@
+generated: '2026-07-24'
+method: searched
+source: https://docs.photon.health/docs/authentication
+docs: https://docs.photon.health/docs/authentication
+provider: Auth0
+audience:
+  production: https://api.photon.health
+  sandbox: https://api.neutron.health
+schemes:
+- name: OAuth2ClientCredentials
+  flow: clientCredentials
+  token_url: https://auth.photon.health/oauth/token
+scopes:
+- scope: read:patient
+  description: Read access to patient records.
+  flows: [clientCredentials]
+- scope: write:patient
+  description: Create and update patient records (e.g. createPatient).
+  flows: [clientCredentials]
+- scope: read:prescription
+  description: Read access to prescriptions.
+  flows: [clientCredentials]
+- scope: write:prescription
+  description: Create/modify prescriptions. Restricted - granted only to authorized providers via user access tokens; not available to M2M tokens.
+  flows: [clientCredentials]
+  restricted: true
+- scope: read:order
+  description: Read access to orders and fulfillment.
+  flows: [clientCredentials]
+- scope: write:order
+  description: Create and modify orders (routing, reroute, resend).
+  flows: [clientCredentials]
+notes: >-
+  Scopes above are the Photon API application scopes documented on the auth page.
+  The Auth0 authorization server additionally advertises standard OIDC scopes
+  (openid, profile, offline_access, email) in its openid-configuration; those are
+  identity scopes, not API-resource scopes. write:prescription is the only
+  restricted resource scope.

@@ -1,0 +1,20 @@
+generated: '2026-07-24'
+method: generated
+source: graphql/photon-clinical-api-schema.json + docs.photon.health
+note: >-
+  Skills are grounded in real GraphQL Query/Mutation fields verified in the
+  harvested introspection schema (Photon is GraphQL-native; field names are the
+  operationIds). No fields were invented.
+skills:
+- file: photon-sync-patient.md
+  name: Sync a patient into Photon
+  api: graphql/photon-clinical-api-schema.json
+  operations: [createPatient, patient, patients]
+- file: photon-benefit-check.md
+  name: Run a patient benefit check
+  api: graphql/photon-clinical-api-schema.json
+  operations: [generateCoverageOptions, createBenefit, patient]
+- file: photon-order-events-webhooks.md
+  name: Subscribe to Photon order events
+  api: graphql/photon-clinical-api-schema.json
+  operations: [createWebhookConfig, webhooks, webhook, updateWebhookConfig, deleteWebhookConfig]

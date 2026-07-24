@@ -1,0 +1,45 @@
+generated: '2026-07-24'
+method: searched
+source: https://docs.photon.health/docs/authentication
+docs: https://docs.photon.health/docs/authentication
+summary:
+  types: [oauth2, http]
+  http_scheme: bearer
+  oauth2_flows: [clientCredentials]
+  provider: Auth0
+  notes: >-
+    Photon secures its single GraphQL endpoint with OAuth2 client-credentials
+    access tokens issued by Auth0. Tokens are presented as a Bearer token in the
+    Authorization header. Two token shapes: machine-to-machine (backend, all
+    actions except write:prescription) and user access tokens (frontend via
+    Elements; only authorized providers receive write:prescription).
+schemes:
+- name: OAuth2ClientCredentials
+  type: oauth2
+  flow: clientCredentials
+  provider: Auth0
+  production:
+    token_url: https://auth.photon.health/oauth/token
+    audience: https://api.photon.health
+    issuer: https://auth.photon.health/
+    jwks_uri: https://auth.photon.health/.well-known/jwks.json
+  sandbox:
+    token_url: https://auth.neutron.health/oauth/token
+    audience: https://api.neutron.health
+  token_type: Bearer
+  expires_in: 86400
+  request_params: [client_id, client_secret, audience, grant_type]
+  sources: [well-known/photon-openid-configuration.json, review.yml]
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  in: header
+  parameter: Authorization
+  sources: [https://docs.photon.health/docs/authentication]
+token_shapes:
+- name: Machine-to-Machine (M2M)
+  audience: backend
+  note: Obtained from the Photon app settings; can perform all actions except write:prescription.
+- name: User Access Token
+  audience: frontend
+  note: Generated from logged-in user roles (via Elements); only authorized providers get write:prescription.

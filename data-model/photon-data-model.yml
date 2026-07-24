@@ -1,0 +1,82 @@
+generated: '2026-07-24'
+method: derived
+source: graphql/photon-clinical-api-schema.json
+note: >-
+  Entity-relationship graph derived from the harvested GraphQL schema
+  (object fields referencing other object types). Photon uses type-prefixed
+  opaque IDs (e.g. pat_, phr_).
+entities:
+- name: Patient
+  id_prefix: pat_
+  key_fields: [id, name, dateOfBirth, sex, email, phone]
+- name: Prescription
+  key_fields: [id, dispenseQuantity, daysSupply, fillsAllowed, fillsRemaining, state, effectiveDate, expirationDate]
+- name: Fill
+  key_fields: [id, state, requestedAt, filledAt]
+- name: Order
+  key_fields: [id, externalId, state, createdAt]
+- name: Pharmacy
+  id_prefix: phr_
+- name: Treatment
+- name: Benefit
+- name: Coverage
+- name: WebhookConfig
+- name: Organization
+- name: User
+- name: Client
+- name: Role
+- name: Invite
+- name: Supervisor
+relationships:
+- from: Prescription
+  to: Fill
+  type: has_many
+  via: fills
+- from: Prescription
+  to: Treatment
+  type: has_one
+  via: treatment
+- from: Fill
+  to: Prescription
+  type: belongs_to
+  via: prescription
+- from: Fill
+  to: Order
+  type: belongs_to
+  via: order
+- from: Fill
+  to: Treatment
+  type: has_one
+  via: treatment
+- from: Order
+  to: Fill
+  type: has_many
+  via: fills
+- from: Order
+  to: Patient
+  type: belongs_to
+  via: patient
+- from: Order
+  to: Pharmacy
+  type: belongs_to
+  via: pharmacy
+- from: Order
+  to: Organization
+  type: belongs_to
+  via: organization
+- from: Order
+  to: OrderFulfillment
+  type: has_one
+  via: fulfillment
+- from: Order
+  to: OrderRoutingHistory
+  type: has_many
+  via: routingHistory
+- from: Patient
+  to: Benefit
+  type: has_many
+  via: benefits
+- from: Patient
+  to: TreatmentHistory
+  type: has_one
+  via: treatmentHistory

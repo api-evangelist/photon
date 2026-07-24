@@ -1,0 +1,46 @@
+generated: '2026-07-24'
+method: searched
+source: docs.photon.health + graphql/photon-clinical-api-schema.json
+api_style: graphql
+transport:
+  endpoint: POST https://clinical-api.photon.health/graphql
+  sandbox_endpoint: POST https://clinical-api.neutron.health/graphql
+  content_type: application/json
+authentication:
+  style: oauth2-client-credentials
+  header: 'Authorization: Bearer <access_token>'
+  provider: Auth0
+  ref: authentication/photon-authentication.yml
+identifiers:
+  style: prefixed-ids
+  note: Entities use type-prefixed opaque IDs.
+  examples:
+  - pat_ (Patient, e.g. pat_123)
+  - phr_ (Pharmacy, e.g. phr_01GA9HPV354YPQATCPCCE8D9N3)
+  format: ULID-style suffix on several resource prefixes
+pagination:
+  style: argument-based
+  note: >-
+    List queries (patients, orders, invites, users, clients) accept filter and
+    limit/offset-style arguments defined per field in the schema; there is no
+    global Relay cursor connection wrapper across all lists.
+error_envelope:
+  style: graphql-errors
+  fields: [message, locations, path, extensions]
+  ref: errors/photon-error-codes.yml
+idempotency:
+  supported: false
+  note: No idempotency-key header/parameter is documented; mutations are not advertised as idempotent.
+events:
+  style: webhooks
+  format: CloudEvents 1.0
+  ref: asyncapi/photon-order-events-webhooks.yml
+rate_limiting:
+  documented: false
+  note: No published rate-limit policy or response headers were found; expect gateway 429 under load.
+cross_references:
+  authentication: authentication/photon-authentication.yml
+  scopes: scopes/photon-scopes.yml
+  errors: errors/photon-error-codes.yml
+  lifecycle: lifecycle/photon-lifecycle.yml
+  data_model: data-model/photon-data-model.yml

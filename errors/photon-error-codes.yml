@@ -1,0 +1,36 @@
+generated: '2026-07-24'
+method: derived
+source: graphql/photon-clinical-api-schema.json + GraphQL spec error semantics
+format: graphql-errors
+envelope:
+  note: >-
+    Photon returns errors in the standard GraphQL response `errors[]` array
+    alongside any partial `data`. Each error carries `message`, `locations`,
+    `path`, and an `extensions` object. Transport-level auth failures are
+    returned by the Auth0 gateway before GraphQL execution.
+  fields: [message, locations, path, extensions]
+error_classes:
+- class: authentication
+  where: HTTP 401 (gateway, before GraphQL execution)
+  cause: Missing, expired, or invalid Bearer access token.
+  remediation: Request a fresh access token from the Auth0 token endpoint with the correct audience.
+- class: authorization
+  where: extensions.code (e.g. FORBIDDEN) or HTTP 403
+  cause: Token lacks the required scope (e.g. write:prescription on an M2M token).
+  remediation: Use a user access token from an authorized provider, or request the needed scope.
+- class: validation
+  where: errors[].extensions
+  cause: Malformed GraphQL query, invalid input arguments, or unknown fields.
+  remediation: Validate the query against the introspected schema; check required non-null input fields.
+- class: not_found
+  where: errors[] with null data node
+  cause: Referenced entity (patient, order, prescription, pharmacy) does not exist or is out of scope.
+  remediation: Confirm the id and that the token's organization owns the record.
+- class: rate_limit
+  where: HTTP 429 (gateway)
+  cause: Too many requests in a window.
+  remediation: Back off and retry with exponential backoff.
+notes: >-
+  Photon does not publish a numbered error-code registry; errors are conveyed
+  via GraphQL `errors[].extensions.code` and HTTP status at the gateway. This
+  catalog is derived from the schema and GraphQL/OAuth conventions.

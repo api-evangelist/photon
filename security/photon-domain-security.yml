@@ -1,0 +1,33 @@
+generated: '2026-07-24'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: photonhealth.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 22 19:14:52 2026 GMT
+  hsts: true
+  hsts_max_age: 63072000
+- host: docs.photon.health
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 10 05:50:35 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: clinical-api.photon.health
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 12 19:35:47 2026 GMT
+  hsts: null
+domains:
+- domain: photonhealth.com
+  dnssec: false
+  caa: []
+  spf: false
+  dmarc: false
+- domain: photon.health
+  dnssec: true
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject

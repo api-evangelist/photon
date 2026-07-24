@@ -29,7 +29,7 @@ tags:
 - Benefit Check
 - OAuth2
 created: '2026-07-24'
-modified: '2026-07-24'
+modified: '2026-07-24T18:00:00Z'
 specificationVersion: '0.19'
 apis:
 - aid: photon:photon-clinical-api
@@ -83,6 +83,8 @@ apis:
   - type: Authentication
     url: https://docs.photon.health/docs/authentication
 common:
+- type: DomainSecurity
+  url: security/photon-domain-security.yml
 - type: Website
   url: https://photonhealth.com/
 - type: DeveloperPortal
@@ -111,6 +113,38 @@ common:
   url: https://photonhealth.com/privacy
 - type: TermsOfService
   url: https://photonhealth.com/terms
+- type: Authentication
+  url: authentication/photon-authentication.yml
+- type: OAuthScopes
+  url: scopes/photon-scopes.yml
+- type: Packages
+  url: packages/photon-packages.yml
+- type: SDKs
+  url: packages/photon-packages.yml
+- type: WellKnown
+  url: well-known/photon-well-known.yml
+- type: MCPServer
+  url: mcp/photon-mcp.yml
+- type: LLMsTxt
+  url: llms/photon-llms.txt
+- type: Conformance
+  url: conformance/photon-conformance.yml
+- type: ErrorCatalog
+  url: errors/photon-error-codes.yml
+- type: Lifecycle
+  url: lifecycle/photon-lifecycle.yml
+- type: Sandbox
+  url: sandbox/photon-sandbox.yml
+- type: Conventions
+  url: conventions/photon-conventions.yml
+- type: Components
+  url: components/photon-components.yml
+- type: DataModel
+  url: data-model/photon-data-model.yml
+- type: Webhooks
+  url: asyncapi/photon-order-events-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

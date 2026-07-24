@@ -1,0 +1,32 @@
+generated: '2026-07-24'
+method: searched
+source: npm registry (@photonhealth scope) + github.com/Photon-Health
+packages:
+- language: javascript
+  registry: npm
+  name: "@photonhealth/sdk"
+  version: 1.3.4
+  url: https://www.npmjs.com/package/@photonhealth/sdk
+  install: npm install @photonhealth/sdk
+  repo: https://github.com/Photon-Health/photon-sdk-js
+  description: Photon JavaScript SDK - PhotonClient for the GraphQL Clinical API (auth + queries/mutations).
+  official: true
+- language: javascript
+  registry: npm
+  name: "@photonhealth/react"
+  version: 1.0.19
+  url: https://www.npmjs.com/package/@photonhealth/react
+  install: npm install @photonhealth/react
+  repo: https://github.com/Photon-Health/photon-sdk-js
+  description: React integration for the Photon JavaScript SDK (PhotonProvider / PhotonClient hooks).
+  official: true
+- language: javascript
+  registry: npm
+  name: "@photonhealth/elements"
+  version: 0.23.11
+  url: https://www.npmjs.com/package/@photonhealth/elements
+  install: npm install @photonhealth/elements
+  repo: https://github.com/Photon-Health/client
+  cdn: https://www.jsdelivr.com/package/npm/@photonhealth/elements
+  description: Photon Elements - prebuilt, framework-agnostic WebComponent UI for embedding prescribing (see components/).
+  official: true

@@ -1,0 +1,30 @@
+generated: '2026-07-24'
+method: searched
+source: live probes of Auth0 authorization server + API/website hosts
+hosts:
+- host: https://auth.photon.health
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: photon-openid-configuration.json
+    note: Auth0-hosted OIDC discovery; grant_types_supported includes client_credentials.
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: photon-oauth-authorization-server.json
+    note: RFC 8414 authorization-server metadata (Auth0).
+  - path: /.well-known/jwks.json
+    status: 200
+    note: JWKS for verifying access tokens (referenced by openid-configuration jwks_uri).
+- host: https://clinical-api.photon.health
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://photonhealth.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://api.photon.health
+  documents:
+  - path: /.well-known/smart-configuration
+    status: 403
+    note: Not a FHIR/SMART server; SMART discovery is refused (confirms GraphQL-native, non-FHIR).

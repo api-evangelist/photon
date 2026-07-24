@@ -1,0 +1,38 @@
+generated: '2026-07-24'
+method: searched
+source: https://docs.photon.health/docs/order-events
+spec_type: Webhooks
+surface: Order Events
+delivery: HTTPS POST to a configurable endpoint (WebhookConfig)
+configuration:
+  via: GraphQL Clinical API
+  operations: [createWebhookConfig, updateWebhookConfig, deleteWebhookConfig, webhooks, webhook]
+  note: Webhook endpoints are registered/managed through the WebhookConfig mutations/queries.
+envelope:
+  format: CloudEvents 1.0
+  fields:
+  - id
+  - type
+  - specversion
+  - datacontenttype
+  - time
+  - subject
+  - source
+  - data
+signature_verification:
+  supported: true
+  note: Photon documents webhook signature verification (see docs "Signature Verification"); verify before trusting payloads.
+events:
+- type: photon:order:created
+  description: An order has been created.
+- type: photon:order:placed
+  description: The order has been sent to a pharmacy.
+- type: photon:order:fulfillment
+  description: Status update as an order progresses through pharmacy fulfillment.
+- type: photon:order:completed
+  description: The order has been picked up or delivered.
+- type: photon:order:canceled
+  description: The order has been canceled.
+- type: photon:order:rerouted
+  description: An order was routed to a different pharmacy.
+docs: https://docs.photon.health/docs/order-events

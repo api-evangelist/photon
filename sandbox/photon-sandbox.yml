@@ -1,0 +1,34 @@
+generated: '2026-07-24'
+method: searched
+source: docs.photon.health + neutron.health sandbox
+environments:
+  production:
+    graphql: https://clinical-api.photon.health/graphql
+    token_url: https://auth.photon.health/oauth/token
+    audience: https://api.photon.health
+    app: https://app.photon.health
+  sandbox:
+    graphql: https://clinical-api.neutron.health/graphql
+    token_url: https://auth.neutron.health/oauth/token
+    audience: https://api.neutron.health
+    app: https://app.neutron.health
+    note: >-
+      The neutron.health domain is Photon's dedicated sandbox. Self-serve
+      onboarding at https://photonhealth.com/onboard provisions sandbox
+      credentials; production write/prescribing requires an authorized provider.
+separation:
+  style: separate-hosts-and-audiences
+  note: Test vs live is separated by host (neutron.health) and Auth0 audience, not by key prefix.
+benefit_check_test_data:
+  source: https://docs.photon.health/reference/patient-benefits-test-data
+  patient_ids: [pat_123, pat_456]
+  member_ids: [PCMSMEM001, ""]
+  bins: ["020321", "610014"]
+  pharmacy_ids:
+  - phr_01GA9HPV354YPQATCPCCE8D9N3
+  - phr_01GA9HPXP2NQQFPTXZHHJ5QTR6
+  medications:
+  - Victoza Subcutaneous Solution Pen-injector 18 MG/3ML
+  - Amoxicillin Oral Tablet 500 MG
+  null_fields: [groupId, pcn]
+  note: Verbatim test values published for exercising benefit-check / coverage scenarios in sandbox.
