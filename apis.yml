@@ -82,6 +82,38 @@ apis:
     url: https://docs.photon.health/reference/patient-benefits-api
   - type: Authentication
     url: https://docs.photon.health/docs/authentication
+- aid: photon:photon-website-api
+  name: Photon Website API
+  description: >-
+    Photon's public website API, covering the onboarding funnel and newsletter
+    signup: create or resume an onboarding session, save path-specific
+    onboarding answers, submit a completed onboarding flow, and create Ghost
+    newsletter signups. A companion onboarding schema endpoint returns the
+    current path definitions, steps and fields, which is the machine-readable
+    contract behind the browser funnel. Discovered 2026-08-14 via Photon's RFC
+    9727 API catalog; the OpenAPI 3.1.0 description is served first-party at
+    photonhealth.com/openapi.json and mirrored at /.well-known/openapi.json.
+    Distinct from the GraphQL Clinical API - this surface never touches
+    prescriptions or PHI.
+  humanURL: https://photonhealth.com/onboard
+  baseURL: https://photonhealth.com
+  tags:
+  - OpenAPI
+  - Onboarding
+  - Agent Discovery
+  properties:
+  - type: OpenAPI
+    url: openapi/photon-website-api-openapi.json
+  - type: Overlay
+    url: overlays/photon-website-api-overlay.yaml
+  - type: ErrorCatalog
+    url: errors/photon-problem-types.yml
+  - type: APICatalog
+    url: well-known/photon-api-catalog.json
+  - type: AgentSkill
+    url: skills/photon-developer-sandbox-onboarding.md
+  - type: Documentation
+    url: https://photonhealth.com/llms.txt
 common:
 - type: DomainSecurity
   url: security/photon-domain-security.yml
@@ -145,6 +177,33 @@ common:
   url: asyncapi/photon-order-events-webhooks.yml
 - type: AgentSkill
   url: skills/_index.yml
+- type: OpenAPI
+  url: openapi/photon-website-api-openapi.json
+- type: Overlay
+  url: overlays/photon-website-api-overlay.yaml
+- type: APICatalog
+  url: well-known/photon-api-catalog.json
+- type: AgenticAccess
+  url: agentic-access/photon-agentic-access.yml
+- type: Compliance
+  url: security/photon-trust-center.yml
+- type: Plans
+  url: plans/photon-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/photon-rate-limits.yml
+- type: Support
+  url: mailto:support@photon.health
+- type: Login
+  url: https://app.photon.health/login
+- type: FAQ
+  url: https://photonhealth.com/faq
+- type: LLMsTxt
+  url: llms/photon-docs-llms.txt
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-14'
+  status: enriched
+  artifacts_added: 10
+  pass: local-v1
