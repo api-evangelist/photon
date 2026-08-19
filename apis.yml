@@ -30,7 +30,7 @@ tags:
 - OAuth2
 created: '2026-07-24'
 modified: '2026-07-24T18:00:00Z'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: photon:photon-clinical-api
   name: Photon Clinical API
