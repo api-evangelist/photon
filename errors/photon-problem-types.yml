@@ -1,0 +1,61 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/photon-website-api-openapi.json
+scope: Photon website API (onboarding + newsletter) only
+format: custom-json-envelope
+note: >-
+  Derived from the 4xx/5xx responses of the website OpenAPI discovered on
+  2026-08-14. This is NOT RFC 9457: no operation returns
+  application/problem+json. Photon uses three hand-rolled JSON envelopes
+  declared in components.schemas. The GraphQL Clinical API has a separate and
+  unrelated error model - see errors/photon-error-codes.yml.
+rfc9457: false
+envelopes:
+- name: ErrorEnvelope
+  schema: '#/components/schemas/ErrorEnvelope'
+  use: Generic error body.
+- name: ValidationErrorEnvelope
+  schema: '#/components/schemas/ValidationErrorEnvelope'
+  use: Returned on 422 from submitOnboardingSession; carries inline per-field errors.
+- name: FieldErrorEnvelope
+  schema: '#/components/schemas/FieldErrorEnvelope'
+  use: Per-field error detail nested inside the validation envelope.
+problem_types:
+- status: 400
+  operations: [saveOnboardingStep, createNewsletterSignup]
+  title: Bad request
+  detail: The submitted email or name is invalid (newsletter), or the step payload is malformed (onboarding).
+  media_type: application/json
+  remediation: Validate the request body against the operation's requestBody schema before retrying.
+- status: 401
+  operations: [saveOnboardingStep, submitOnboardingSession]
+  title: Unauthorized
+  detail: Missing or invalid onboarding lead token.
+  remediation: >-
+    Supply the x-onboarding-lead-token header (or the photon_onboarding_lead
+    cookie) returned by createOrResumeOnboardingSession. Both are apiKey schemes
+    and the session endpoints also accept anonymous access, so a 401 here means a
+    token was sent and rejected rather than merely absent.
+- status: 422
+  operations: [submitOnboardingSession]
+  title: Validation failed
+  detail: The response includes inline field errors.
+  media_type: application/json
+  schema: '#/components/schemas/ValidationErrorEnvelope'
+  remediation: Read the per-field errors and re-prompt the user for the specific fields named; do not blind-retry.
+- status: 502
+  operations: [createNewsletterSignup]
+  title: Bad gateway
+  detail: Upstream newsletter provider (Ghost) unreachable.
+  remediation: Retryable with backoff.
+- status: 503
+  operations: [createNewsletterSignup]
+  title: Service unavailable
+  detail: Upstream newsletter provider temporarily unavailable.
+  remediation: Retryable with backoff.
+gaps:
+- 400 and 401 responses declare no content schema, so a client cannot know the error body shape for those statuses from the spec alone.
+- No 429 is declared on any operation despite no published rate limits.
+cross_references:
+  graphql_errors: errors/photon-error-codes.yml
+  conventions: conventions/photon-conventions.yml

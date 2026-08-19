@@ -1,0 +1,63 @@
+generated: '2026-08-14'
+method: searched
+source: https://trust.photon.health + https://photonhealth.com/faq + https://photonhealth.com/baa
+trust_center:
+  url: https://trust.photon.health
+  status: 200
+  platform: Vanta
+  slug: cw5vz8j1xq7tausfpowe
+  machine_readable: false
+  note: >-
+    The trust center is a Vanta-hosted single-page app. The shell returns HTTP
+    200 with the title "Photon Trust Center" but every control, certification
+    and subprocessor is rendered client-side, so no certification list can be
+    read from the served HTML. The certifications recorded below therefore come
+    from Photon's own first-party pages, not from scraping the trust center.
+certifications:
+- name: SOC 2
+  status: claimed
+  evidence: >-
+    "Yes, Photon is HIPAA & SOC-2 compliant." - published verbatim on
+    https://photonhealth.com/faq (HTTP 200), under "Is Photon HIPAA compliant?".
+  source: https://photonhealth.com/faq
+  report_available: unknown
+  note: Type (I vs II) is not stated on any public page; the report itself is behind the Vanta trust center.
+- name: HIPAA
+  status: claimed
+  evidence: >-
+    Same FAQ answer; reinforced by a published Platform Business Associate
+    Agreement covering HIPAA and the HITECH Act.
+  source: https://photonhealth.com/faq
+regulatory_posture:
+- framework: HIPAA / HITECH
+  role: Business Associate
+  artifact: https://photonhealth.com/baa
+  status: 200
+  last_updated: '2025-10-14'
+  note: >-
+    Photon Health, Inc. publishes a click-accept Platform Business Associate
+    Agreement, incorporated by reference into the Order Form, naming itself
+    Business Associate to covered-entity customers. A published BAA is the
+    strongest HIPAA signal a vendor can serve without an audit report.
+- framework: Controlled substances (EPCS)
+  status: out-of-scope
+  evidence: 'FAQ: "Does Photon support controlled substances?" - "No."'
+  source: https://photonhealth.com/faq
+supply_chain:
+- partner: FDB Vela
+  claim: HITRUST-certified, cloud-native architecture with full redundancy and 24/7 availability for prescription transmissions.
+  source: https://photonhealth.com/faq
+  note: >-
+    HITRUST here belongs to FDB Vela, the prescription-transmission network
+    Photon routes through - NOT to Photon. Recorded as a supply-chain property
+    so it is never mistaken for a Photon certification.
+safeguards:
+  claim: Administrative, technical, and physical safeguards for PHI.
+  source: https://photonhealth.com/faq
+gaps:
+- No SOC 2 report type (I/II), audit period, or auditor is published.
+- No subprocessor list is reachable without JavaScript.
+- No ISO 27001 or HITRUST certification is claimed by Photon itself.
+cross_references:
+  vulnerability_disclosure: none-published (see well-known/photon-well-known.yml third_party_documents)
+  domain_security: security/photon-domain-security.yml

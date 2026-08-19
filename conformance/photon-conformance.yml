@@ -1,7 +1,71 @@
-generated: '2026-07-24'
-method: derived
-source: graphql/photon-clinical-api-schema.json + docs.photon.health
+generated: '2026-08-14'
+method: searched
+source: graphql/photon-clinical-api-schema.json + openapi/photon-website-api-openapi.json + live probes + docs.photon.health + photonhealth.com/faq
 standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: >-
+    OpenAPI 3.1.0 served at https://photonhealth.com/openapi.json (HTTP 200,
+    content-type application/vnd.oai.openapi+json), 8 operations, all with
+    operationId + summary + tags, 20 component schemas, 2 securitySchemes.
+    Scope is the website/onboarding API, not the Clinical API.
+- id: rfc9727-api-catalog
+  conforms: true
+  evidence: >-
+    https://photonhealth.com/.well-known/api-catalog returns HTTP 200 with
+    content-type application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727",
+    carrying service-desc, service-doc, describedby, index, alternate and
+    contents link relations.
+- id: rfc9264-linkset
+  conforms: true
+  evidence: The api-catalog body is a well-formed RFC 9264 linkset document (anchor + typed relation arrays).
+- id: rfc8288-web-linking
+  conforms: true
+  evidence: >-
+    Every HTML and Markdown response from photonhealth.com carries Link headers
+    with api-catalog, service-desc, service-doc, describedby, index, contents,
+    alternate, canonical and llms relations.
+- id: llmstxt
+  conforms: true
+  evidence: >-
+    Two published files - https://photonhealth.com/llms.txt (HTTP 200, with an
+    explicit "For agents" policy section) and https://docs.photon.health/llms.txt
+    (HTTP 200, full documentation index).
+- id: content-signal
+  conforms: true
+  evidence: >-
+    Content-Signal response header observed with value
+    "ai-train=yes, search=yes, ai-input=yes", mirrored in site-index.json.
+- id: hipaa
+  conforms: true
+  evidence: >-
+    Published Platform Business Associate Agreement at
+    https://photonhealth.com/baa (HTTP 200, last updated 2025-10-14) naming
+    Photon Health, Inc. as Business Associate under HIPAA/HITECH; FAQ states
+    "Photon is HIPAA & SOC-2 compliant".
+- id: soc2
+  conforms: claimed
+  evidence: >-
+    Claimed verbatim on https://photonhealth.com/faq; a Vanta trust center is
+    served at https://trust.photon.health (HTTP 200) but is JS-rendered, so no
+    report type, audit period or auditor is machine-readable. See
+    security/photon-trust-center.yml.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    No security.txt on any Photon-controlled host (photonhealth.com,
+    docs.photon.health, clinical-api.photon.health, auth.photon.health all 404;
+    api.photon.health 403). The only 200 is Atlassian's own file on the rented
+    status page host and is not Photon's.
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json probed on six
+    hosts; all 404/403 except app.photon.health, which returns an HTML SPA shell
+    for every well-known path and is therefore not a card.
+- id: mcp
+  conforms: false
+  evidence: 'Provider states in llms.txt: "A unified MCP server for Photon is planned but not yet available."'
 - id: oauth2
   conforms: true
   evidence: OAuth2 client-credentials access tokens via Auth0 (docs/authentication + openid-configuration).

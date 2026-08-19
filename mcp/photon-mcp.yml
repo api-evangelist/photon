@@ -1,13 +1,23 @@
-generated: '2026-07-24'
+generated: '2026-08-14'
 method: derived
 status: candidate
 source: graphql/photon-clinical-api-schema.json
 note: >-
-  No official hosted Photon MCP server was found (checked docs, the Photon-Health
-  GitHub org, and MCP registries as of 2026-07-24). The tools below are a
-  candidate surface derived one-per-field from the harvested GraphQL Query and
-  Mutation types; each tool's real input contract is that field's GraphQL
-  arguments in graphql/photon-clinical-api-schema.json. Not a published server.
+  No official Photon MCP server exists. As of 2026-08-14 this is confirmed by the
+  provider itself rather than only by our search: photonhealth.com/llms.txt states
+  verbatim "A unified MCP server for Photon is planned but not yet available. In
+  the interim, agents can call the same site endpoints used by the browser
+  onboarding funnel." The GitHub org (5 repos) ships no MCP package and MCP
+  registries list none. The tools below are a candidate surface derived
+  one-per-field from the harvested GraphQL Query and Mutation types; each tool's
+  real input contract is that field's GraphQL arguments in
+  graphql/photon-clinical-api-schema.json. Not a published server.
+vendor_statement:
+  source: https://photonhealth.com/llms.txt
+  status: 200
+  fetched: '2026-08-14'
+  verbatim: A unified MCP server for Photon is planned but not yet available.
+  interim_guidance: Agents can call the same site endpoints used by the browser onboarding funnel (see openapi/photon-website-api-openapi.json).
 server:
   name: photon-clinical-api
   transport: http
@@ -41,9 +51,13 @@ tools:
 - name: list_pharmacies
   description: Search pharmacies for routing.
   source_field: graphql/photon-clinical-api-schema.json#Query.pharmacies
-- name: get_treatment_options
+- name: get_treatments
   description: Query the treatment/medication catalog.
-  source_field: graphql/photon-clinical-api-schema.json#Query.treatmentOptions
+  source_field: graphql/photon-clinical-api-schema.json#Query.treatments
+  note: >-
+    Was Query.treatmentOptions in the 2026-07-24 derivation. That field is now
+    deprecated in the live schema ("Use the `treatments` query instead.") and the
+    candidate tool was repointed on 2026-08-14. See lifecycle/photon-lifecycle.yml.
 - name: generate_coverage_options
   description: Generate benefit coverage options for a patient (Patient Benefits API).
   source_field: graphql/photon-clinical-api-schema.json#Mutation.generateCoverageOptions
@@ -56,3 +70,18 @@ tools:
 - name: list_webhooks
   description: List configured webhook endpoints.
   source_field: graphql/photon-clinical-api-schema.json#Query.webhooks
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+  tools: 14
+  checked: '2026-08-14'
+  source: https://photonhealth.com/llms.txt (provider states an MCP server is planned but not yet available) + github.com/Photon-Health (5 repos, no MCP package)
+  note: >-
+    mode none because nobody ships a server - neither a remote endpoint nor a
+    stdio package. Upgraded from verified:derived to verified:searched because
+    the absence is now confirmed by a first-party published statement, not just
+    by our failure to find one. No endpoint URL is guessed.

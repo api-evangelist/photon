@@ -1,6 +1,32 @@
-generated: '2026-07-24'
+generated: '2026-08-14'
 method: searched
-source: docs.photon.health + graphql/photon-clinical-api-schema.json
+source: docs.photon.health + graphql/photon-clinical-api-schema.json + openapi/photon-website-api-openapi.json + live header probes
+surfaces:
+  note: >-
+    Photon runs TWO unrelated HTTP surfaces with different conventions. Do not
+    apply one's rules to the other.
+  clinical_api:
+    style: graphql
+    host: https://clinical-api.photon.health
+    auth: OAuth2 client-credentials (Auth0) Bearer
+    contract: graphql/photon-clinical-api-schema.json
+  website_api:
+    style: rest
+    host: https://photonhealth.com
+    auth: onboarding lead token (apiKey header or cookie); anonymous also permitted
+    contract: openapi/photon-website-api-openapi.json
+    scope: onboarding funnel + newsletter signup only
+content_negotiation:
+  markdown_twins: true
+  request: 'Accept: text/markdown'
+  alias: append .md to any page URL (/index.html.md for the homepage)
+  response_headers: [content-type text/markdown, content-signal, x-markdown-tokens]
+  scope: photonhealth.com marketing pages and docs.photon.health pages
+  ref: agentic-access/photon-agentic-access.yml
+discovery:
+  api_catalog: https://photonhealth.com/.well-known/api-catalog
+  link_headers: true
+  note: RFC 9727 linkset plus RFC 8288 Link headers on every response; see conformance/photon-conformance.yml.
 api_style: graphql
 transport:
   endpoint: POST https://clinical-api.photon.health/graphql
@@ -30,7 +56,13 @@ error_envelope:
   ref: errors/photon-error-codes.yml
 idempotency:
   supported: false
-  note: No idempotency-key header/parameter is documented; mutations are not advertised as idempotent.
+  note: >-
+    No idempotency-key header or parameter exists on either surface. Re-checked
+    2026-08-14: the GraphQL schema declares no idempotency argument on any of the
+    26 Mutation fields, and the website OpenAPI declares no idempotency header on
+    any of its 5 write operations. The closest thing is the create-OR-RESUME
+    semantic on createOrResumeOnboardingSession, which limits duplicate leads but
+    is not a general idempotency contract. No Idempotency pointer is emitted.
 events:
   style: webhooks
   format: CloudEvents 1.0

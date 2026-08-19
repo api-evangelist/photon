@@ -1,0 +1,67 @@
+generated: '2026-08-14'
+method: searched
+source: https://photonhealth.com/api/onboarding/schema + https://photonhealth.com/llms.txt + https://photonhealth.com/onboard
+plan_count: 0
+published_pricing: false
+note: >-
+  Photon publishes NO pricing page and NO priced tiers. https://photonhealth.com/pricing
+  returns HTTP 404 and no pricing link appears anywhere in the first-party
+  navigation tree (navigation.json, HTTP 200). What Photon does publish, in
+  machine-readable form, is an ACCESS-PATH model: the onboarding schema at
+  /api/onboarding/schema (HTTP 200) enumerates six paths and the acquisition
+  mode of each. Every production path is sales-led or verification-gated; only
+  the developer sandbox is self-serve, and it is explicitly free. Recorded as
+  plan_count 0 with the access paths captured, rather than omitting the file.
+access_paths:
+- id: developer
+  label: Developer
+  mode: self_serve
+  description: Build and test in a sandbox
+  price: free
+  currency: USD
+  billing_period: none
+  evidence: >-
+    "The developer sandbox is free, does not require payment, and cannot send
+    real prescriptions." - https://photonhealth.com/llms.txt (verbatim)
+  environment: https://app.neutron.health
+  limits:
+    can_send_real_prescriptions: false
+- id: prescriber
+  label: Prescriber
+  mode: verification_required
+  description: Start prescribing in the app
+  price: not-published
+  note: Requires individual NPI and specialty/volume verification before access.
+- id: clinic
+  label: Clinic
+  mode: sales_led
+  description: Launch prescribing in production
+  price: not-published
+- id: enterprise
+  label: Enterprise
+  mode: sales_led
+  description: Large medical group or health system
+  price: not-published
+- id: platform
+  label: Platform
+  mode: sales_led
+  description: EHR or clinical platform
+  price: not-published
+- id: other
+  label: Other
+  mode: sales_led
+  description: Tell us what you are looking for
+  price: not-published
+sales_contact:
+  email: sales@photon.health
+  booking: https://calendly.com/photon-growth/intro
+  source: https://docs.photon.health/docs/getting-started
+evidence:
+- url: https://photonhealth.com/pricing
+  status: 404
+- url: https://photonhealth.com/api/onboarding/schema
+  status: 200
+- url: https://photonhealth.com/llms.txt
+  status: 200
+- url: https://photonhealth.com/navigation.json
+  status: 200

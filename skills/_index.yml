@@ -1,11 +1,18 @@
-generated: '2026-07-24'
+generated: '2026-08-14'
 method: generated
-source: graphql/photon-clinical-api-schema.json + docs.photon.health
+source: graphql/photon-clinical-api-schema.json + openapi/photon-website-api-openapi.json + docs.photon.health + photonhealth.com/llms.txt
 note: >-
-  Skills are grounded in real GraphQL Query/Mutation fields verified in the
-  harvested introspection schema (Photon is GraphQL-native; field names are the
-  operationIds). No fields were invented.
+  Skills are grounded in real operations verified in a harvested contract - the
+  GraphQL introspection schema (Photon is GraphQL-native; field names are the
+  operationIds) and, as of 2026-08-14, the website OpenAPI discovered via the
+  RFC 9727 api-catalog. No fields or operationIds were invented. The onboarding
+  skill additionally encodes Photon's own published agent policy verbatim.
 skills:
+- file: photon-developer-sandbox-onboarding.md
+  name: Onboard to the Photon developer sandbox
+  api: openapi/photon-website-api-openapi.json
+  operations: [getOnboardingSchema, createOrResumeOnboardingSession, saveOnboardingStep, submitOnboardingSession]
+  note: The only onboarding path Photon permits an agent to complete, and only with explicit user consent.
 - file: photon-sync-patient.md
   name: Sync a patient into Photon
   api: graphql/photon-clinical-api-schema.json

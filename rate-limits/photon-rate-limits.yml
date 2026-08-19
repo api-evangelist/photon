@@ -1,0 +1,36 @@
+generated: '2026-08-14'
+method: searched
+source: docs.photon.health (all 13 guide + reference pages) + live response headers
+limit_count: 0
+documented: false
+note: >-
+  Photon publishes no rate-limit policy. Every page listed in the docs llms.txt
+  index was fetched as Markdown and searched for rate/limit/throttle/quota/429/
+  Retry-After/X-RateLimit - zero matches across all of them. No rate-limiting
+  response headers were observed on live unauthenticated responses from
+  photonhealth.com or clinical-api.photon.health either. An honest zero: the
+  limits may well exist at the gateway, but a consumer cannot discover them
+  before hitting one.
+headers_observed: []
+documented_limits: []
+exhaustion_behavior:
+  status_code: 429
+  method: derived
+  confidence: low
+  note: >-
+    Not documented by Photon. errors/photon-error-codes.yml carries a rate_limit
+    class inferred from ordinary gateway behavior; treat as a convention, not a
+    published contract.
+recommendation: >-
+  Publish per-token limits and emit RateLimit-Limit / RateLimit-Remaining /
+  RateLimit-Reset (RFC 9331) or X-RateLimit-* plus Retry-After on 429, so agents
+  can back off on signal rather than on failure.
+evidence:
+- url: https://docs.photon.health/llms.txt
+  status: 200
+- url: https://docs.photon.health/docs/integration-guide.md
+  status: 200
+- url: https://docs.photon.health/reference/clinical-api.md
+  status: 200
+- url: https://clinical-api.photon.health/graphql
+  status: 200

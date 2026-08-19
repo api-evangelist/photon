@@ -1,0 +1,108 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enrichment overlay - Photon website API
+  version: 1.0.0
+extends: ../openapi/photon-website-api-openapi.json
+x-provenance:
+  generated: '2026-08-14'
+  method: generated
+  source: openapi/photon-website-api-openapi.json + https://photonhealth.com/llms.txt + https://photonhealth.com/api/onboarding/schema
+  note: >-
+    Captures API Evangelist enrichments only. The original spec is never
+    mutated. Every statement below is grounded in a document Photon publishes:
+    the agent policy is verbatim from llms.txt, the access modes are from the
+    onboarding schema, and the consequence/escalation classes match
+    agentic-access/photon-agentic-access.yml.
+actions:
+- target: $.info
+  description: Record provenance and the discovery route that found this spec.
+  update:
+    x-apis-io-provenance:
+      discovered_via: https://photonhealth.com/.well-known/api-catalog
+      discovery_spec: RFC 9727 linkset
+      canonical_url: https://photonhealth.com/openapi.json
+      mirror_url: https://photonhealth.com/.well-known/openapi.json
+      first_captured: '2026-08-14'
+      scope: >-
+        Public website API behind the onboarding funnel and newsletter signup.
+        This is NOT the Photon Clinical API - that surface is GraphQL at
+        clinical-api.photon.health/graphql and is described by
+        graphql/photon-clinical-api-schema.json.
+- target: $
+  description: Attach the agent-access contract Photon states in its own llms.txt.
+  update:
+    x-agentic-access:
+      policy_source: https://photonhealth.com/llms.txt
+      agents_permitted: true
+      consent_required: explicit-user-consent
+      free_path: developer sandbox
+      fenced_actions:
+      - real prescribing (not reachable from this API)
+      - production access (sales-led / verification-required)
+- target: $.paths['/api/onboarding/schema'].get
+  description: Mark the discovery read as agent-safe.
+  update:
+    x-agentic-access:
+      action_class: read
+      consequence: none
+      escalation: none
+      note: Photon's llms.txt directs agents to start here.
+- target: $.paths['/api/onboarding/sessions'].post
+  description: Classify session creation.
+  update:
+    x-agentic-access:
+      action_class: write
+      consequence: low
+      escalation: user-consent
+      idempotent: false
+      note: >-
+        Create-or-resume semantics limit duplicate-lead risk, but no idempotency
+        key is accepted.
+- target: $.paths['/api/onboarding/sessions/{sessionId}'].patch
+  description: Classify step save.
+  update:
+    x-agentic-access:
+      action_class: write
+      consequence: low
+      escalation: user-consent
+- target: $.paths['/api/onboarding/sessions/{sessionId}/submit'].post
+  description: Classify submission as the consequential, non-reversible step.
+  update:
+    x-agentic-access:
+      action_class: write
+      consequence: medium
+      escalation: user-consent
+      reversible: false
+      note: >-
+        Submits the user's identity and contact details and triggers sales or
+        verification follow-up. An agent must have explicit consent before
+        calling this, per Photon's published policy.
+- target: $.paths['/api/newsletter'].post
+  description: Classify newsletter signup.
+  update:
+    x-agentic-access:
+      action_class: write
+      consequence: medium
+      escalation: user-consent
+      reversible: false
+      note: Writes the user's email to a third-party newsletter provider (Ghost).
+- target: $.components.securitySchemes.leadTokenHeader
+  description: Document the lead-token lifecycle, which the spec declares but does not explain.
+  update:
+    x-token-lifecycle:
+      issued_by: createOrResumeOnboardingSession
+      scope: a single onboarding session
+      carries_pii: true
+      note: >-
+        Anonymous access is also permitted on the session endpoints (the security
+        list includes an empty requirement object), so the token resumes a
+        session rather than gating first access.
+- target: $
+  description: Cross-link the artifacts derived from this spec.
+  update:
+    x-apis-io-artifacts:
+      errors: errors/photon-problem-types.yml
+      agentic_access: agentic-access/photon-agentic-access.yml
+      well_known: well-known/photon-well-known.yml
+      plans: plans/photon-plans-pricing.yml
+      skills: skills/photon-developer-sandbox-onboarding.md

@@ -1,6 +1,6 @@
-generated: '2026-07-24'
+generated: '2026-08-14'
 method: searched
-source: docs.photon.health + status.photon.health + GraphQL schema introspection
+source: docs.photon.health + status.photon.health + GraphQL schema introspection (re-run 2026-08-14)
 versioning:
   scheme: schema-evolution
   current: unversioned
@@ -18,8 +18,48 @@ migration_guides:
 - https://docs.photon.health/docs/integration-guide-1
 - https://docs.photon.health/docs/dosespot
 - https://docs.photon.health/docs/mdtoolbox
-deprecated_operations: []
+deprecated_operations:
+- operation: Query.treatmentOptions
+  kind: graphql-field
+  deprecation_reason: 'Use the `treatments` query instead.'
+  replacement: Query.treatments
+  sunset_date: null
+  observed: '2026-08-14'
+  source: introspection of https://clinical-api.photon.health/graphql
+  note: >-
+    First deprecation observed on this API. Flagged only in the schema
+    (isDeprecated + deprecationReason); it is not announced in any changelog,
+    carries no Sunset date, and the docs do not mention it. An integrator learns
+    about it only by introspecting.
+schema_drift:
+  window: 2026-07-24 to 2026-08-14
+  named_types_before: 105
+  named_types_after: 113
+  added: 8
+  removed: 0
+  breaking: false
+  added_types:
+  - OrganizationAdminContactInput
+  - OrganizationContactSettingsInput
+  - OrganizationOrderExceptionContactInput
+  - OrganizationOrderExceptionContactPreference
+  - OrganizationOrderExceptionContactsInput
+  - OrganizationPatientUxSmsSettingsInput
+  - OrganizationRxPdfContactInput
+  - OrganizationRxPdfContactPreference
+  note: >-
+    Measured evidence for the additive-evolution claim above: 8 organization
+    contact/notification input types were added and nothing was removed in three
+    weeks. Query exposes 27 fields, Mutation 26.
+changelog:
+  published: false
+  note: >-
+    No changelog, release-notes or "what's new" page exists. docs.photon.health/changelog
+    and /docs/changelog both return 404, and none of the 13 documentation pages
+    indexed in the docs llms.txt mention one. Combined with an unversioned
+    endpoint, schema changes and deprecations ship unannounced - the single
+    largest operational gap on this provider.
 notes: >-
-  Migration guides exist for onboarding off DoseSpot and MDToolbox. Introspection
-  on 2026-07-24 found no fields flagged isDeprecated. No public SLA/uptime target
-  document was found beyond the live status page.
+  Migration guides exist for onboarding off DoseSpot and MDToolbox. No public
+  SLA/uptime target document was found beyond the live status page
+  (status.photon.health, HTTP 200, Atlassian Statuspage).

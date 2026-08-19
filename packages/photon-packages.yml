@@ -1,32 +1,82 @@
-generated: '2026-07-24'
+generated: '2026-08-14'
 method: searched
-source: npm registry (@photonhealth scope) + github.com/Photon-Health
+source: registry.npmjs.org metadata (2026-08-14) + github.com/Photon-Health
+note: >-
+  Currency re-read from the npm registry on 2026-08-14. Finding: Photon's two
+  client SDKs are stale by years while the UI component library ships actively.
+  @photonhealth/sdk last published 2024-09-06 and @photonhealth/react
+  2023-12-14, but the GraphQL Clinical API they wrap gained 8 named types and a
+  field deprecation since 2026-07-24 alone. An integrator installing the
+  first-party SDK today gets a client that predates a large part of the schema
+  it is meant to call.
 packages:
 - language: javascript
   registry: npm
   name: "@photonhealth/sdk"
   version: 1.3.4
+  published: '2024-09-06'
+  releases: 162
   url: https://www.npmjs.com/package/@photonhealth/sdk
   install: npm install @photonhealth/sdk
   repo: https://github.com/Photon-Health/photon-sdk-js
   description: Photon JavaScript SDK - PhotonClient for the GraphQL Clinical API (auth + queries/mutations).
   official: true
+  currency: stale
+  currency_note: >-
+    No release in ~23 months. The Clinical API is unversioned and evolves
+    additively, so schema additions since 2024-09 are not represented here.
 - language: javascript
   registry: npm
   name: "@photonhealth/react"
   version: 1.0.19
+  published: '2023-12-14'
+  releases: 177
   url: https://www.npmjs.com/package/@photonhealth/react
   install: npm install @photonhealth/react
   repo: https://github.com/Photon-Health/photon-sdk-js
   description: React integration for the Photon JavaScript SDK (PhotonProvider / PhotonClient hooks).
   official: true
+  currency: stale
+  currency_note: No release in ~32 months - the oldest first-party artifact Photon ships.
 - language: javascript
   registry: npm
   name: "@photonhealth/elements"
-  version: 0.23.11
+  version: 0.23.13
+  published: '2026-08-05'
+  releases: 174
   url: https://www.npmjs.com/package/@photonhealth/elements
   install: npm install @photonhealth/elements
   repo: https://github.com/Photon-Health/client
-  cdn: https://www.jsdelivr.com/package/npm/@photonhealth/elements
+  cdn: https://cdn.jsdelivr.net/npm/@photonhealth/elements
+  cdn_pinned: false
   description: Photon Elements - prebuilt, framework-agnostic WebComponent UI for embedding prescribing (see components/).
   official: true
+  currency: current
+  currency_note: >-
+    Published 9 days before this check; the client monorepo (github.com/Photon-Health/client)
+    was last pushed 2026-08-14. This is where Photon's SDK effort actually goes.
+    Note the documented jsDelivr loader URL is UNPINNED - a consumer loading
+    cdn.jsdelivr.net/npm/@photonhealth/elements floats to whatever is latest and
+    cannot tell which build they received.
+registries_checked:
+- registry: npm
+  scope: "@photonhealth"
+  result: 3 official packages
+- registry: pypi
+  result: none
+- registry: rubygems
+  result: none
+- registry: packagist
+  result: none
+- registry: crates.io
+  result: none
+- registry: nuget
+  result: none
+- registry: maven-central
+  result: none
+- registry: pkg.go.dev
+  result: none
+note_language_coverage: >-
+  JavaScript/TypeScript only. There is no first-party Python, Ruby, Go, Java,
+  PHP, .NET or Rust client for a GraphQL API, so every non-JS integrator writes
+  raw GraphQL against clinical-api.photon.health/graphql.

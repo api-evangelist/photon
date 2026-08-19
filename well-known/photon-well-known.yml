@@ -1,7 +1,40 @@
-generated: '2026-07-24'
+generated: '2026-08-14'
 method: searched
-source: live probes of Auth0 authorization server + API/website hosts
+source: live probes of the Photon website, API, Auth0 and vendor hosts
+note: >-
+  Round 2 (2026-08-14) found a real RFC 9727 API catalog on the marketing host
+  that round 1 never probed. photonhealth.com/.well-known/api-catalog returns
+  HTTP 200 with content-type application/linkset+json and the RFC 9727 profile,
+  and it advertises a first-party OpenAPI, an llms.txt, a site index and the
+  onboarding schema. The same linkset is mirrored into RFC 8288 Link headers on
+  every HTML and Markdown response.
 hosts:
+- host: https://photonhealth.com
+  documents:
+  - path: /.well-known/api-catalog
+    status: 200
+    file: photon-api-catalog.json
+    content_type: application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"
+    note: >-
+      RFC 9727 linkset. service-desc -> /openapi.json and
+      /.well-known/openapi.json; service-doc -> docs.photon.health/docs;
+      describedby -> /api/onboarding/schema and /llms.txt; index ->
+      /site-index.json; alternate -> /site-index.md; contents ->
+      /navigation.json.
+  - path: /.well-known/openapi.json
+    status: 200
+    content_type: application/vnd.oai.openapi+json
+    note: >-
+      Well-known alias of /openapi.json - byte-identical (37,226 bytes). Saved
+      once as openapi/photon-website-api-openapi.json.
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
 - host: https://auth.photon.health
   documents:
   - path: /.well-known/openid-configuration
@@ -15,16 +48,62 @@ hosts:
   - path: /.well-known/jwks.json
     status: 200
     note: JWKS for verifying access tokens (referenced by openid-configuration jwks_uri).
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
 - host: https://clinical-api.photon.health
   documents:
   - path: /.well-known/security.txt
     status: 404
-- host: https://photonhealth.com
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+    note: JSON 404 from the Fastify router ("Route GET:/.well-known/agent-card.json not found") - a true negative, not an SPA shell.
+- host: https://docs.photon.health
   documents:
   - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
     status: 404
 - host: https://api.photon.health
   documents:
   - path: /.well-known/smart-configuration
     status: 403
     note: Not a FHIR/SMART server; SMART discovery is refused (confirms GraphQL-native, non-FHIR).
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+soft_200_rejections:
+- host: https://app.photon.health
+  paths: [/.well-known/agent-card.json, /.well-known/agent.json, /.well-known/security.txt]
+  status: 200
+  content_type: text/html
+  verdict: rejected
+  note: >-
+    SPA catch-all - every /.well-known/* path returns the same HTML app shell.
+    Not a document. No AgentCard or SecurityTxt pointer is emitted from these.
+- host: https://trust.photon.health
+  paths: [/.well-known/security.txt]
+  status: 200
+  content_type: text/html
+  verdict: rejected
+  note: Vanta trust-center SPA shell, not an RFC 9116 document.
+third_party_documents:
+- host: https://status.photon.health
+  path: /.well-known/security.txt
+  status: 200
+  content_type: text/plain
+  owner: Atlassian (Statuspage vendor)
+  verdict: not-photon
+  note: >-
+    A real PGP-signed RFC 9116 document IS served here, but it is Atlassian's,
+    not Photon's - Contact is
+    https://www.atlassian.com/trust/security/report-a-vulnerability. It belongs
+    to the Statuspage host Photon rents, so it is NOT credited to Photon and NO
+    SecurityTxt or Security pointer is emitted. Photon publishes no security.txt
+    of its own on any host it controls.

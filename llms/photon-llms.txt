@@ -1,24 +1,88 @@
-# Photon Health Documentation
+# Photon
 
-> Documentation for Photon Health
+> Photon is a prescription marketplace platform that sits between the prescribe and fill moments, enabling patients to comparison-shop pharmacies by price and convenience. We integrate with EHRs, pharmacies, and payers to give patients real choice at the point of prescription.
 
-## Guides
-- [Getting Started](https://docs.photon.health/docs/getting-started.md)
-- [Integration Guide](https://docs.photon.health/docs/integration-guide.md)
-- [Migration Guide](https://docs.photon.health/docs/integration-guide-1.md)
-- [DoseSpot Migration Guide](https://docs.photon.health/docs/dosespot.md)
-- [MDToolbox Migration Guide](https://docs.photon.health/docs/mdtoolbox.md)
-- [Elements](https://docs.photon.health/docs/elements.md)
-- [Authentication](https://docs.photon.health/docs/authentication.md)
-- [Order Events](https://docs.photon.health/docs/order-events.md)
-- [Sync Patients](https://docs.photon.health/docs/sync-patients.md)
-- [Sync Allergies](https://docs.photon.health/docs/sync-allergies.md): Optional integration for enabling allergy screening
-- [Sync Medication History](https://docs.photon.health/docs/sync-medication-history.md): Optional integration to enable drug-drug interaction screening for historical medications
-- [Screen for Drug/Drug or Drug/Allergy Interactions](https://docs.photon.health/docs/using-ddi-and-dai.md): Optional integration to enable drug-drug interaction screening for historical medications
-- [Benefit Checks](https://docs.photon.health/docs/benefit-check-documentation.md): View estimated out-of-pocket costs, alternative medications, pharmacy dispensing options, and insurance coverage details
-- [Order & Rx Status Guide](https://docs.photon.health/docs/order-rx-status-retail-pharmacycourier-delivery.md): This guide explains the different status indicators you'll see when tracking your orders in our web app.
+## For agents
 
-## API Reference
-- [Clinical API](https://docs.photon.health/reference/clinical-api.md)
-- [Patient Benefits API](https://docs.photon.health/reference/patient-benefits-api.md)
-- [Benefits Test Data](https://docs.photon.health/reference/patient-benefits-test-data.md)
+Start with the onboarding schema. It returns a complete `allPaths` tree with each path's mode, entry URL, steps, and fields. Resolve first-party links in this file against the current host so Vercel previews and production stay aligned.
+
+Agents may help a user evaluate Photon and may complete the developer sandbox path with explicit user consent. The developer sandbox is free, does not require payment, and cannot send real prescriptions. Prescriber access requires verification. Clinic, enterprise, platform, and other production paths are sales-led or handoff-led and should expect human follow-up.
+
+A unified MCP server for Photon is planned but not yet available. In the interim, agents can call the same site endpoints used by the browser onboarding funnel.
+
+## Markdown access
+
+For human-facing pages, send `Accept: text/markdown` to receive a Markdown representation of the page instead of HTML. HTML remains the default for browser requests. Markdown responses include `Content-Type: text/markdown`, `Content-Signal`, and `x-markdown-tokens`.
+
+Direct Markdown aliases are also available for page URLs by appending `.md`, with `/index.html.md` for the homepage.
+Canonical HTML pages advertise their Markdown alternate with `rel="alternate"; type="text/markdown"` response headers and HTML head links.
+
+## How to use this site
+
+Photon serves prescribers, developers, clinics, enterprise health systems, and clinical platforms. The fastest way to determine what's available to you is to fetch the onboarding schema, which describes all paths and their requirements.
+
+## Onboarding
+
+- [API catalog](/.well-known/api-catalog): Linkset catalog for Photon public API discovery.
+- [OpenAPI](/openapi.json): OpenAPI 3.1 description of the public website APIs.
+- [OpenAPI well-known](/.well-known/openapi.json): Well-known alias for the same OpenAPI description.
+- [Site index](/site-index.json): Complete canonical page index with Markdown alternate URLs.
+- [Site index Markdown](/site-index.md): Markdown version of the complete page index.
+- [Navigation JSON](/navigation.json): Current first-party navigation tree with grouped links.
+- [Onboarding schema](/api/onboarding/schema): JSON description of all onboarding paths, the steps each path requires, and the fields collected. Designed for both browser and programmatic clients.
+- [Get started](/get-started): Human-facing path selection page.
+- [Onboarding funnel](/onboard): The funnel itself. Accepts a hash like #prescriber, #developer, #clinic, #enterprise, or #platform to enter a specific path directly.
+- [Homepage Markdown](/index.html.md): Markdown version of the homepage.
+- [Get started Markdown](/get-started.md): Markdown version of the path selection page.
+- [Onboarding Markdown](/onboard.md): Markdown guide to onboarding paths and fields.
+
+## Page index
+
+- [Home](/) ([Markdown](/index.html.md))
+- [Get started](/get-started) ([Markdown](/get-started.md))
+- [Onboarding funnel](/onboard) ([Markdown](/onboard.md))
+- [Marketplace](/marketplace) ([Markdown](/marketplace.md))
+- [Network](/network) ([Markdown](/network.md))
+- [Tech-enabled care](/tech-enabled-care) ([Markdown](/tech-enabled-care.md))
+- [Urgent care](/urgent-care) ([Markdown](/urgent-care.md))
+- [Health systems](/health-systems) ([Markdown](/health-systems.md))
+- [About](/about-us) ([Markdown](/about-us.md))
+- [Careers](/careers) ([Markdown](/careers.md))
+- [Blog](/blog) ([Markdown](/blog.md))
+- [Case studies](/case-studies) ([Markdown](/case-studies.md))
+- [Amazon Pharmacy case study](/case-studies/amazon-pharmacy) ([Markdown](/case-studies/amazon-pharmacy.md))
+- [athenahealth case study](/case-studies/athena-health) ([Markdown](/case-studies/athena-health.md))
+- [Blueberry Pediatrics case study](/case-studies/blueberry-pediatrics) ([Markdown](/case-studies/blueberry-pediatrics.md))
+- [Cost Plus case study](/case-studies/cost-plus) ([Markdown](/case-studies/cost-plus.md))
+- [Found case study](/case-studies/found) ([Markdown](/case-studies/found.md))
+- [Measured case study](/case-studies/measured) ([Markdown](/case-studies/measured.md))
+- [NormanMD case study](/case-studies/normanmd) ([Markdown](/case-studies/normanmd.md))
+- [Sesame case study](/case-studies/sesame) ([Markdown](/case-studies/sesame.md))
+- [Terms](/terms) ([Markdown](/terms.md))
+- [Privacy](/privacy) ([Markdown](/privacy.md))
+- [BAA](/baa) ([Markdown](/baa.md))
+
+## Product
+
+- [Marketplace](/marketplace): How patients compare pharmacy prices through Photon.
+- [Network](/network): The pharmacy network Photon connects to.
+- [API and developer docs](https://docs.photon.health/docs): Reference for building against the Photon API.
+
+## Solutions
+
+- [Tech-enabled care](/tech-enabled-care): For digital health and telehealth platforms.
+- [Urgent care](/urgent-care): For urgent care providers.
+- [Health systems](/health-systems): For hospital systems and large provider organizations.
+
+## Company
+
+- [About](/about-us)
+- [Blog](/blog)
+- [Case studies](/case-studies)
+- [Careers](/careers)
+
+## Legal and compliance
+
+- [Terms](/terms)
+- [Privacy](/privacy)
+- [BAA](/baa)
