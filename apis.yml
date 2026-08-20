@@ -27,6 +27,17 @@ tags:
 - Clinical API
 - Digital Health
 - Benefit Check
+- Authentication
+tags_raw:
+- Healthcare
+- United States
+- e-Prescribing
+- Pharmacy
+- Prescription Routing
+- GraphQL
+- Clinical API
+- Digital Health
+- Benefit Check
 - OAuth2
 created: '2026-07-24'
 modified: '2026-07-24T18:00:00Z'
