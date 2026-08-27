@@ -46,12 +46,10 @@ apis:
 - aid: photon:photon-clinical-api
   name: Photon Clinical API
   description: >-
-    Photon's native GraphQL Clinical API for managing patients, prescriptions,
-    orders, pharmacies, the treatment/medication catalog, drug-drug and
-    drug-allergy interaction screening, webhooks, and organization/user
-    administration. A single POST /graphql endpoint secured with OAuth2
-    client-credentials (Auth0) bearer tokens. Schema harvested verbatim via
-    unauthenticated GraphQL introspection.
+    Photon's native GraphQL Clinical API for managing patients, prescriptions, orders, pharmacies, the
+    treatment/medication catalog, drug-drug and drug-allergy interaction screening, webhooks, and organization/user
+    administration. A single POST /graphql endpoint secured with OAuth2 client-credentials (Auth0) bearer
+    tokens. Schema harvested verbatim via unauthenticated GraphQL introspection.
   humanURL: https://docs.photon.health/reference/clinical-api
   baseURL: https://clinical-api.photon.health/graphql
   tags:
@@ -74,10 +72,9 @@ apis:
 - aid: photon:photon-patient-benefits-api
   name: Photon Patient Benefits API
   description: >-
-    Photon's GraphQL Patient Benefits API for managing patient benefits and
-    enabling pharmacy benefit checks (coverage options, copay, and formulary)
-    during the prescribing workflow. Served over the same GraphQL endpoint via
-    mutations such as createBenefit and generateCoverageOptions.
+    Photon's GraphQL Patient Benefits API for managing patient benefits and enabling pharmacy benefit
+    checks (coverage options, copay, and formulary) during the prescribing workflow. Served over the same
+    GraphQL endpoint via mutations such as createBenefit and generateCoverageOptions.
   humanURL: https://docs.photon.health/reference/patient-benefits-api
   baseURL: https://clinical-api.photon.health/graphql
   tags:
@@ -93,39 +90,59 @@ apis:
     url: https://docs.photon.health/reference/patient-benefits-api
   - type: Authentication
     url: https://docs.photon.health/docs/authentication
-- aid: photon:photon-website-api
-  name: Photon Website API
-  description: >-
-    Photon's public website API, covering the onboarding funnel and newsletter
-    signup: create or resume an onboarding session, save path-specific
-    onboarding answers, submit a completed onboarding flow, and create Ghost
-    newsletter signups. A companion onboarding schema endpoint returns the
-    current path definitions, steps and fields, which is the machine-readable
-    contract behind the browser funnel. Discovered 2026-08-14 via Photon's RFC
-    9727 API catalog; the OpenAPI 3.1.0 description is served first-party at
-    photonhealth.com/openapi.json and mirrored at /.well-known/openapi.json.
-    Distinct from the GraphQL Clinical API - this surface never touches
-    prescriptions or PHI.
-  humanURL: https://photonhealth.com/onboard
-  baseURL: https://photonhealth.com
+- aid: photon:photon-agent-discovery-api
+  name: Photon Agent discovery API
+  description: Machine-readable discovery resources for agents and integrations.
+  humanURL: https://docs.photon.health/reference/clinical-api
+  baseURL: https://clinical-api.photon.health/graphql
   tags:
-  - OpenAPI
-  - Onboarding
-  - Agent Discovery
+  - Agent discovery
   properties:
   - type: OpenAPI
-    url: openapi/photon-website-api-openapi.json
-  - type: Overlay
-    url: overlays/photon-website-api-overlay.yaml
+    url: openapi/photon-agent-discovery-api-openapi.yml
   - type: ErrorCatalog
     url: errors/photon-problem-types.yml
   - type: APICatalog
     url: well-known/photon-api-catalog.json
-  - type: AgentSkill
-    url: skills/photon-developer-sandbox-onboarding.md
+  - type: Documentation
+    url: https://photonhealth.com/llms.txt
+- aid: photon:photon-newsletter-api
+  name: Photon Newsletter API
+  description: First-party endpoint for adding newsletter signups to Ghost Members.
+  humanURL: https://docs.photon.health/reference/clinical-api
+  baseURL: https://clinical-api.photon.health/graphql
+  tags:
+  - Newsletter
+  properties:
+  - type: OpenAPI
+    url: openapi/photon-newsletter-api-openapi.yml
+  - type: ErrorCatalog
+    url: errors/photon-problem-types.yml
+  - type: APICatalog
+    url: well-known/photon-api-catalog.json
+  - type: Documentation
+    url: https://photonhealth.com/llms.txt
+- aid: photon:photon-onboarding-api
+  name: Photon Onboarding API
+  description: >-
+    First-party onboarding endpoints for prescriber, developer, clinic, enterprise, platform, and other
+    paths.
+  humanURL: https://docs.photon.health/reference/clinical-api
+  baseURL: https://clinical-api.photon.health/graphql
+  tags:
+  - Onboarding
+  properties:
+  - type: OpenAPI
+    url: openapi/photon-onboarding-api-openapi.yml
+  - type: ErrorCatalog
+    url: errors/photon-problem-types.yml
+  - type: APICatalog
+    url: well-known/photon-api-catalog.json
   - type: Documentation
     url: https://photonhealth.com/llms.txt
 common:
+- type: AgentSkill
+  url: skills/photon-developer-sandbox-onboarding.md
 - type: DomainSecurity
   url: security/photon-domain-security.yml
 - type: Website
