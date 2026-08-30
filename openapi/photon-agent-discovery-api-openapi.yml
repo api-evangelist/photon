@@ -1,0 +1,67 @@
+openapi: 3.2.0
+info:
+  title: Photon website Agent discovery API
+  summary: Public website API used by the Photon onboarding funnel and newsletter signup.
+  description: Create or resume an onboarding session, save path-specific onboarding answers, submit a completed onboarding flow, and create Ghost newsletter signups. The companion onboarding schema endpoint returns the current path definitions, steps, and fields.
+  version: '2026-05-13'
+  contact:
+    name: Photon Health
+    url: https://photonhealth.com
+servers:
+- url: https://photonhealth.com
+tags:
+- name: Agent discovery
+  description: Machine-readable discovery resources for agents and integrations.
+paths:
+  /openapi.json:
+    get:
+      tags:
+      - Agent discovery
+      operationId: getOpenApiSpec
+      summary: Get this OpenAPI document
+      responses:
+        '200':
+          description: OpenAPI 3.1 document for Photon website APIs.
+          content:
+            application/json:
+              schema:
+                type: object
+  /.well-known/openapi.json:
+    get:
+      tags:
+      - Agent discovery
+      operationId: getWellKnownOpenApiSpec
+      summary: Get this OpenAPI document from the well-known path
+      responses:
+        '200':
+          description: OpenAPI 3.1 document for Photon website APIs.
+          content:
+            application/json:
+              schema:
+                type: object
+  /.well-known/api-catalog:
+    get:
+      tags:
+      - Agent discovery
+      operationId: getApiCatalog
+      summary: Get the API catalog linkset
+      responses:
+        '200':
+          description: RFC 9727 linkset pointing to OpenAPI, docs, schema, and llms.txt.
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    leadTokenHeader:
+      type: apiKey
+      in: header
+      name: x-onboarding-lead-token
+    leadTokenCookie:
+      type: apiKey
+      in: cookie
+      name: photon_onboarding_lead
+externalDocs:
+  description: Photon developer documentation
+  url: https://docs.photon.health/docs

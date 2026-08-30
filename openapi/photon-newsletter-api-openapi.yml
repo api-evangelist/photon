@@ -1,0 +1,163 @@
+openapi: 3.2.0
+info:
+  title: Photon website Newsletter API
+  summary: Public website API used by the Photon onboarding funnel and newsletter signup.
+  description: Create or resume an onboarding session, save path-specific onboarding answers, submit a completed onboarding flow, and create Ghost newsletter signups. The companion onboarding schema endpoint returns the current path definitions, steps, and fields.
+  version: '2026-05-13'
+  contact:
+    name: Photon Health
+    url: https://photonhealth.com
+servers:
+- url: https://photonhealth.com
+tags:
+- name: Newsletter
+  description: First-party endpoint for adding newsletter signups to Ghost Members.
+paths:
+  /api/newsletter:
+    post:
+      tags:
+      - Newsletter
+      operationId: createNewsletterSignup
+      summary: Create a newsletter signup
+      description: Accepts an email and optional name, then creates a free Ghost member for the Photon newsletter.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsletterSignupRequest'
+            example:
+              email: ada@example.com
+              name: Ada Lovelace
+      responses:
+        '200':
+          description: The email already existed as a Ghost member and can be treated as signed up.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsletterSignupEnvelope'
+        '201':
+          description: Newsletter member created in Ghost.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsletterSignupEnvelope'
+        '400':
+          description: The submitted email or name is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldErrorEnvelope'
+        '502':
+          $ref: '#/components/responses/ErrorResponse'
+        '503':
+          $ref: '#/components/responses/ErrorResponse'
+components:
+  responses:
+    ErrorResponse:
+      description: Request failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+  schemas:
+    ErrorEnvelope:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+    NewsletterSignupEnvelope:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - status
+          - member
+          properties:
+            status:
+              type: string
+              enum:
+              - created
+              - already_exists
+            member:
+              $ref: '#/components/schemas/NewsletterMember'
+    NewsletterSignupRequest:
+      type: object
+      required:
+      - email
+      additionalProperties: true
+      properties:
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+          maxLength: 191
+          description: Optional member name to store in Ghost.
+    FieldErrorEnvelope:
+      type: object
+      required:
+      - error
+      - errors
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+    NewsletterMember:
+      type: object
+      required:
+      - email
+      - subscribed
+      - newsletters
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+        uuid:
+          anyOf:
+          - type: string
+          - type: 'null'
+        email:
+          type: string
+          format: email
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+        subscribed:
+          type: boolean
+        newsletters:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            properties:
+              id:
+                anyOf:
+                - type: string
+                - type: 'null'
+              name:
+                type: string
+  securitySchemes:
+    leadTokenHeader:
+      type: apiKey
+      in: header
+      name: x-onboarding-lead-token
+    leadTokenCookie:
+      type: apiKey
+      in: cookie
+      name: photon_onboarding_lead
+externalDocs:
+  description: Photon developer documentation
+  url: https://docs.photon.health/docs
