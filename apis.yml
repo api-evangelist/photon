@@ -107,6 +107,8 @@ apis:
   humanURL: https://docs.photon.health/reference/clinical-api
   baseURL: https://clinical-api.photon.health/graphql
   tags:
+  - Agent Discovery
+  tags_raw:
   - Agent discovery
   properties:
   - type: OpenAPI
