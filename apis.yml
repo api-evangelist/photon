@@ -2,20 +2,16 @@ aid: photon
 url: https://raw.githubusercontent.com/api-evangelist/photon/refs/heads/main/apis.yml
 name: Photon
 kind: company
-description: >-
-  Photon Health is a United States prescription-infrastructure and e-prescribing
-  (eRx) platform that lets digital-health companies embed prescribing, pharmacy
-  selection, prescription routing, and fulfillment tracking into their clinical
-  applications. Rather than an HL7 FHIR interface, Photon exposes a native
-  GraphQL Clinical API - a single POST /graphql endpoint covering patients,
-  prescriptions, orders, pharmacies, the medication/treatment catalog, drug-drug
-  and drug-allergy screening, webhooks, and organization/user administration -
-  plus a Patient Benefits API for pharmacy benefit checks and coverage. It also
-  ships Photon Elements, prebuilt WebComponent UI for prescribing. The API is
-  secured with OAuth2 client-credentials (Auth0) using machine-to-machine and
-  user access tokens and prescription/order scopes; a sandbox runs on
-  neutron.health. Photon serves prescribers and pharmacy-innovation partners
-  including Amazon Pharmacy, Sesame, WeightWatchers, and Found.
+description: Photon Health is a United States prescription-infrastructure and e-prescribing (eRx) platform
+  that lets digital-health companies embed prescribing, pharmacy selection, prescription routing, and
+  fulfillment tracking into their clinical applications. Rather than an HL7 FHIR interface, Photon exposes
+  a native GraphQL Clinical API - a single POST /graphql endpoint covering patients, prescriptions, orders,
+  pharmacies, the medication/treatment catalog, drug-drug and drug-allergy screening, webhooks, and organization/user
+  administration - plus a Patient Benefits API for pharmacy benefit checks and coverage. It also ships
+  Photon Elements, prebuilt WebComponent UI for prescribing. The API is secured with OAuth2 client-credentials
+  (Auth0) using machine-to-machine and user access tokens and prescription/order scopes; a sandbox runs
+  on neutron.health. Photon serves prescribers and pharmacy-innovation partners including Amazon Pharmacy,
+  Sesame, WeightWatchers, and Found.
 deliveryModel:
   model: saas
   open_source: false
@@ -67,16 +63,15 @@ tags_raw:
 - Benefit Check
 - OAuth2
 created: '2026-07-24'
-modified: '2026-07-24T18:00:00Z'
+modified: '2026-09-16'
 specificationVersion: '0.23'
 apis:
 - aid: photon:photon-clinical-api
   name: Photon Clinical API
-  description: >-
-    Photon's native GraphQL Clinical API for managing patients, prescriptions, orders, pharmacies, the
-    treatment/medication catalog, drug-drug and drug-allergy interaction screening, webhooks, and organization/user
-    administration. A single POST /graphql endpoint secured with OAuth2 client-credentials (Auth0) bearer
-    tokens. Schema harvested verbatim via unauthenticated GraphQL introspection.
+  description: Photon's native GraphQL Clinical API for managing patients, prescriptions, orders, pharmacies,
+    the treatment/medication catalog, drug-drug and drug-allergy interaction screening, webhooks, and
+    organization/user administration. A single POST /graphql endpoint secured with OAuth2 client-credentials
+    (Auth0) bearer tokens. Schema harvested verbatim via unauthenticated GraphQL introspection.
   humanURL: https://docs.photon.health/reference/clinical-api
   baseURL: https://clinical-api.photon.health/graphql
   tags:
@@ -98,10 +93,9 @@ apis:
     url: https://docs.photon.health/docs/using-ddi-and-dai
 - aid: photon:photon-patient-benefits-api
   name: Photon Patient Benefits API
-  description: >-
-    Photon's GraphQL Patient Benefits API for managing patient benefits and enabling pharmacy benefit
-    checks (coverage options, copay, and formulary) during the prescribing workflow. Served over the same
-    GraphQL endpoint via mutations such as createBenefit and generateCoverageOptions.
+  description: Photon's GraphQL Patient Benefits API for managing patient benefits and enabling pharmacy
+    benefit checks (coverage options, copay, and formulary) during the prescribing workflow. Served over
+    the same GraphQL endpoint via mutations such as createBenefit and generateCoverageOptions.
   humanURL: https://docs.photon.health/reference/patient-benefits-api
   baseURL: https://clinical-api.photon.health/graphql
   tags:
@@ -153,9 +147,8 @@ apis:
     url: https://photonhealth.com/llms.txt
 - aid: photon:photon-onboarding-api
   name: Photon Onboarding API
-  description: >-
-    First-party onboarding endpoints for prescriber, developer, clinic, enterprise, platform, and other
-    paths.
+  description: First-party onboarding endpoints for prescriber, developer, clinic, enterprise, platform,
+    and other paths.
   humanURL: https://docs.photon.health/reference/clinical-api
   baseURL: https://clinical-api.photon.health/graphql
   tags:
@@ -214,7 +207,10 @@ common:
   url: well-known/photon-well-known.yml
 - type: X-MCPServerCandidate
   url: mcp/photon-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate
+    — a tool list derived from the published API contracts, not an existing server. The scorer already
+    read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type
+    surfaces with a server that does not exist.'
 - type: LLMsTxt
   url: llms/photon-llms.txt
 - type: Conformance
@@ -236,7 +232,7 @@ common:
 - type: AgentSkill
   url: skills/_index.yml
 - type: OpenAPI
-  url: openapi/photon-website-api-openapi.json
+  url: openapi/_original/photon-website-api-openapi.json
 - type: Overlay
   url: overlays/photon-website-api-overlay.yaml
 - type: APICatalog
