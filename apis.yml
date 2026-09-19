@@ -135,6 +135,8 @@ apis:
   humanURL: https://docs.photon.health/reference/clinical-api
   baseURL: https://clinical-api.photon.health/graphql
   tags:
+  - Newsletters
+  tags_raw:
   - Newsletter
   properties:
   - type: OpenAPI
