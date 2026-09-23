@@ -10,13 +10,13 @@ info:
 servers:
 - url: https://photonhealth.com
 tags:
-- name: Agent discovery
+- name: Agent Discovery
   description: Machine-readable discovery resources for agents and integrations.
 paths:
   /openapi.json:
     get:
       tags:
-      - Agent discovery
+      - Agent Discovery
       operationId: getOpenApiSpec
       summary: Get this OpenAPI document
       responses:
@@ -29,7 +29,7 @@ paths:
   /.well-known/openapi.json:
     get:
       tags:
-      - Agent discovery
+      - Agent Discovery
       operationId: getWellKnownOpenApiSpec
       summary: Get this OpenAPI document from the well-known path
       responses:
@@ -42,7 +42,7 @@ paths:
   /.well-known/api-catalog:
     get:
       tags:
-      - Agent discovery
+      - Agent Discovery
       operationId: getApiCatalog
       summary: Get the API catalog linkset
       responses:

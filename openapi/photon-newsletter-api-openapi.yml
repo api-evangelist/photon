@@ -53,13 +53,6 @@ paths:
         '503':
           $ref: '#/components/responses/ErrorResponse'
 components:
-  responses:
-    ErrorResponse:
-      description: Request failed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorEnvelope'
   schemas:
     ErrorEnvelope:
       type: object
@@ -68,24 +61,6 @@ components:
       properties:
         error:
           type: string
-    NewsletterSignupEnvelope:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          required:
-          - status
-          - member
-          properties:
-            status:
-              type: string
-              enum:
-              - created
-              - already_exists
-            member:
-              $ref: '#/components/schemas/NewsletterMember'
     NewsletterSignupRequest:
       type: object
       required:
@@ -99,18 +74,6 @@ components:
           type: string
           maxLength: 191
           description: Optional member name to store in Ghost.
-    FieldErrorEnvelope:
-      type: object
-      required:
-      - error
-      - errors
-      properties:
-        error:
-          type: string
-        errors:
-          type: object
-          additionalProperties:
-            type: string
     NewsletterMember:
       type: object
       required:
@@ -149,6 +112,43 @@ components:
                 - type: 'null'
               name:
                 type: string
+    NewsletterSignupEnvelope:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - status
+          - member
+          properties:
+            status:
+              type: string
+              enum:
+              - created
+              - already_exists
+            member:
+              $ref: '#/components/schemas/NewsletterMember'
+    FieldErrorEnvelope:
+      type: object
+      required:
+      - error
+      - errors
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+  responses:
+    ErrorResponse:
+      description: Request failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
   securitySchemes:
     leadTokenHeader:
       type: apiKey
