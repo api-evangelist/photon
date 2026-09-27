@@ -1163,6 +1163,221 @@ paths:
                 $ref: '#/components/schemas/ValidationErrorEnvelope'
 components:
   schemas:
+    OnboardingStateEnvelope:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - flow
+          - session
+          - leadToken
+          - schema
+          - answers
+          properties:
+            flow:
+              $ref: '#/components/schemas/OnboardingSession'
+            session:
+              $ref: '#/components/schemas/OnboardingSession'
+            leadToken:
+              type: string
+            schema:
+              $ref: '#/components/schemas/OnboardingSchema'
+            answers:
+              $ref: '#/components/schemas/Answers'
+            errors:
+              type: object
+              additionalProperties:
+                type: string
+            checkoutUrl:
+              anyOf:
+              - type: string
+                format: uri
+              - type: 'null'
+            identityRestartRequired:
+              type: boolean
+            nextStep:
+              type: string
+    ValidationErrorEnvelope:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - flow
+          - session
+          - errors
+          properties:
+            flow:
+              $ref: '#/components/schemas/OnboardingSession'
+            session:
+              $ref: '#/components/schemas/OnboardingSession'
+            errors:
+              type: object
+              additionalProperties:
+                type: string
+            identityRestartRequired:
+              type: boolean
+            stepId:
+              type: string
+    OnboardingPathId:
+      type: string
+      enum:
+      - prescriber
+      - developer
+      - clinic
+      - enterprise
+      - platform
+      - other
+      description: Public onboarding path id. Prefer `/onboard?type={id}` for new human links. Legacy `/onboard#{id}` and `/onboard#{id}-{payment_plan_tier}` links remain supported.
+    OnboardingField:
+      type: object
+      required:
+      - name
+      - label
+      - type
+      properties:
+        name:
+          type: string
+        label:
+          type: string
+        type:
+          type: string
+          enum:
+          - email
+          - multi-select
+          - radio-cards
+          - select
+          - tel
+          - text
+          - textarea
+          - url
+        required:
+          type: boolean
+        options:
+          type: array
+          items:
+            anyOf:
+            - type: string
+            - $ref: '#/components/schemas/OnboardingPathChoice'
+        placeholder:
+          type: string
+        autoComplete:
+          type: string
+        inputMode:
+          type: string
+        showWhen:
+          type: object
+          additionalProperties: true
+          properties:
+            field:
+              type: string
+            value:
+              type: string
+    OnboardingSchema:
+      type: object
+      required:
+      - paths
+      - allPaths
+      - path
+      - steps
+      properties:
+        paths:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnboardingPathChoice'
+        allPaths:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnboardingFullPath'
+        path:
+          anyOf:
+          - $ref: '#/components/schemas/OnboardingPathId'
+          - type: 'null'
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnboardingStep'
+    ErrorEnvelope:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+    ProvisioningResult:
+      type: object
+      additionalProperties: true
+      properties:
+        status:
+          type: string
+          enum:
+          - completed
+          - failed
+          - handoff_required
+          - pending
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+          properties:
+            invite:
+              type: object
+              additionalProperties: true
+              properties:
+                id:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                url:
+                  type: string
+                  format: uri
+    OnboardingMode:
+      type: string
+      enum:
+      - self_serve
+      - verification_required
+      - sales_led
+    OnboardingFullPath:
+      type: object
+      required:
+      - id
+      - label
+      - description
+      - cta
+      - mode
+      - provisioningMode
+      - entryPath
+      - steps
+      properties:
+        id:
+          $ref: '#/components/schemas/OnboardingPathId'
+        label:
+          type: string
+        description:
+          type: string
+        cta:
+          type: string
+        mode:
+          $ref: '#/components/schemas/OnboardingMode'
+        provisioningMode:
+          type: string
+          enum:
+          - developer
+          - prescriber
+          - handoff
+        entryPath:
+          type: string
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnboardingStep'
     SaveStepRequest:
       type: object
       required:
@@ -1187,13 +1402,21 @@ components:
           - type: 'null'
         leadToken:
           type: string
-    ErrorEnvelope:
+    OnboardingStep:
       type: object
       required:
-      - error
+      - id
+      - title
+      - fields
       properties:
-        error:
+        id:
           type: string
+        title:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnboardingField'
     Answers:
       type: object
       additionalProperties:
@@ -1240,45 +1463,20 @@ components:
         customer_org_count: 1-10
         terms_of_service_accepted_at: '2026-05-25T12:00:00.000Z'
         business_associate_agreement_accepted_at: '2026-05-25T12:00:00.000Z'
-    OnboardingStep:
+    TrackingSummary:
       type: object
-      required:
-      - id
-      - title
-      - fields
+      additionalProperties: true
       properties:
-        id:
+        source:
           type: string
-        title:
+        medium:
           type: string
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/OnboardingField'
-    ValidationErrorEnvelope:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          required:
-          - flow
-          - session
-          - errors
-          properties:
-            flow:
-              $ref: '#/components/schemas/OnboardingSession'
-            session:
-              $ref: '#/components/schemas/OnboardingSession'
-            errors:
-              type: object
-              additionalProperties:
-                type: string
-            identityRestartRequired:
-              type: boolean
-            stepId:
-              type: string
+        campaign:
+          type: string
+        referrer:
+          type: string
+        landingPath:
+          type: string
     OnboardingSession:
       type: object
       additionalProperties: true
@@ -1362,219 +1560,6 @@ components:
           type: string
         attioPersonRecordId:
           type: string
-    ProvisioningResult:
-      type: object
-      additionalProperties: true
-      properties:
-        status:
-          type: string
-          enum:
-          - completed
-          - failed
-          - handoff_required
-          - pending
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties: true
-          properties:
-            invite:
-              type: object
-              additionalProperties: true
-              properties:
-                id:
-                  type: string
-                email:
-                  type: string
-                  format: email
-                url:
-                  type: string
-                  format: uri
-    SubmitRequest:
-      type: object
-      additionalProperties: false
-      properties:
-        answers:
-          $ref: '#/components/schemas/Answers'
-        draftState:
-          anyOf:
-          - $ref: '#/components/schemas/OnboardingSession'
-          - type: 'null'
-        leadToken:
-          type: string
-        turnstileToken:
-          type: string
-          description: Cloudflare Turnstile token. Required when both Turnstile keys are configured.
-    OnboardingField:
-      type: object
-      required:
-      - name
-      - label
-      - type
-      properties:
-        name:
-          type: string
-        label:
-          type: string
-        type:
-          type: string
-          enum:
-          - email
-          - multi-select
-          - radio-cards
-          - select
-          - tel
-          - text
-          - textarea
-          - url
-        required:
-          type: boolean
-        options:
-          type: array
-          items:
-            anyOf:
-            - type: string
-            - $ref: '#/components/schemas/OnboardingPathChoice'
-        placeholder:
-          type: string
-        autoComplete:
-          type: string
-        inputMode:
-          type: string
-        showWhen:
-          type: object
-          additionalProperties: true
-          properties:
-            field:
-              type: string
-            value:
-              type: string
-    OnboardingFullPath:
-      type: object
-      required:
-      - id
-      - label
-      - description
-      - cta
-      - mode
-      - provisioningMode
-      - entryPath
-      - steps
-      properties:
-        id:
-          $ref: '#/components/schemas/OnboardingPathId'
-        label:
-          type: string
-        description:
-          type: string
-        cta:
-          type: string
-        mode:
-          $ref: '#/components/schemas/OnboardingMode'
-        provisioningMode:
-          type: string
-          enum:
-          - developer
-          - prescriber
-          - handoff
-        entryPath:
-          type: string
-        steps:
-          type: array
-          items:
-            $ref: '#/components/schemas/OnboardingStep'
-    OnboardingMode:
-      type: string
-      enum:
-      - self_serve
-      - verification_required
-      - sales_led
-    OnboardingPathId:
-      type: string
-      enum:
-      - prescriber
-      - developer
-      - clinic
-      - enterprise
-      - platform
-      - other
-      description: Public onboarding path id. Prefer `/onboard?type={id}` for new human links. Legacy `/onboard#{id}` and `/onboard#{id}-{payment_plan_tier}` links remain supported.
-    TrackingSummary:
-      type: object
-      additionalProperties: true
-      properties:
-        source:
-          type: string
-        medium:
-          type: string
-        campaign:
-          type: string
-        referrer:
-          type: string
-        landingPath:
-          type: string
-    OnboardingSchema:
-      type: object
-      required:
-      - paths
-      - allPaths
-      - path
-      - steps
-      properties:
-        paths:
-          type: array
-          items:
-            $ref: '#/components/schemas/OnboardingPathChoice'
-        allPaths:
-          type: array
-          items:
-            $ref: '#/components/schemas/OnboardingFullPath'
-        path:
-          anyOf:
-          - $ref: '#/components/schemas/OnboardingPathId'
-          - type: 'null'
-        steps:
-          type: array
-          items:
-            $ref: '#/components/schemas/OnboardingStep'
-    OnboardingStateEnvelope:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          required:
-          - flow
-          - session
-          - leadToken
-          - schema
-          - answers
-          properties:
-            flow:
-              $ref: '#/components/schemas/OnboardingSession'
-            session:
-              $ref: '#/components/schemas/OnboardingSession'
-            leadToken:
-              type: string
-            schema:
-              $ref: '#/components/schemas/OnboardingSchema'
-            answers:
-              $ref: '#/components/schemas/Answers'
-            errors:
-              type: object
-              additionalProperties:
-                type: string
-            checkoutUrl:
-              anyOf:
-              - type: string
-                format: uri
-              - type: 'null'
-            identityRestartRequired:
-              type: boolean
-            nextStep:
-              type: string
     OnboardingPathChoice:
       type: object
       required:
@@ -1594,19 +1579,34 @@ components:
           type: string
         mode:
           $ref: '#/components/schemas/OnboardingMode'
+    SubmitRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        answers:
+          $ref: '#/components/schemas/Answers'
+        draftState:
+          anyOf:
+          - $ref: '#/components/schemas/OnboardingSession'
+          - type: 'null'
+        leadToken:
+          type: string
+        turnstileToken:
+          type: string
+          description: Cloudflare Turnstile token. Required when both Turnstile keys are configured.
   responses:
-    OnboardingStateResponse:
-      description: Current onboarding session state.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OnboardingStateEnvelope'
     ErrorResponse:
       description: Request failed.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorEnvelope'
+    OnboardingStateResponse:
+      description: Current onboarding session state.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OnboardingStateEnvelope'
   securitySchemes:
     leadTokenHeader:
       type: apiKey
