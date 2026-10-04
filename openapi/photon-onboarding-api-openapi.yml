@@ -1163,6 +1163,122 @@ paths:
                 $ref: '#/components/schemas/ValidationErrorEnvelope'
 components:
   schemas:
+    TrackingSummary:
+      type: object
+      additionalProperties: true
+      properties:
+        source:
+          type: string
+        medium:
+          type: string
+        campaign:
+          type: string
+        referrer:
+          type: string
+        landingPath:
+          type: string
+    SaveStepRequest:
+      type: object
+      required:
+      - stepId
+      additionalProperties: false
+      properties:
+        stepId:
+          type: string
+        action:
+          type: string
+          enum:
+          - save
+          - advance
+          default: save
+        values:
+          $ref: '#/components/schemas/Answers'
+        existingAnswers:
+          $ref: '#/components/schemas/Answers'
+        draftState:
+          anyOf:
+          - $ref: '#/components/schemas/OnboardingSession'
+          - type: 'null'
+        leadToken:
+          type: string
+    OnboardingMode:
+      type: string
+      enum:
+      - self_serve
+      - verification_required
+      - sales_led
+    ProvisioningResult:
+      type: object
+      additionalProperties: true
+      properties:
+        status:
+          type: string
+          enum:
+          - completed
+          - failed
+          - handoff_required
+          - pending
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+          properties:
+            invite:
+              type: object
+              additionalProperties: true
+              properties:
+                id:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                url:
+                  type: string
+                  format: uri
+    ValidationErrorEnvelope:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - flow
+          - session
+          - errors
+          properties:
+            flow:
+              $ref: '#/components/schemas/OnboardingSession'
+            session:
+              $ref: '#/components/schemas/OnboardingSession'
+            errors:
+              type: object
+              additionalProperties:
+                type: string
+            identityRestartRequired:
+              type: boolean
+            stepId:
+              type: string
+    OnboardingPathChoice:
+      type: object
+      required:
+      - id
+      - label
+      - description
+      - cta
+      - mode
+      properties:
+        id:
+          $ref: '#/components/schemas/OnboardingPathId'
+        label:
+          type: string
+        description:
+          type: string
+        cta:
+          type: string
+        mode:
+          $ref: '#/components/schemas/OnboardingMode'
     OnboardingSchema:
       type: object
       required:
@@ -1187,40 +1303,43 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OnboardingStep'
-    OnboardingStep:
+    OnboardingStateEnvelope:
       type: object
       required:
-      - id
-      - title
-      - fields
+      - data
       properties:
-        id:
-          type: string
-        title:
-          type: string
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/OnboardingField'
-    OnboardingPathChoice:
-      type: object
-      required:
-      - id
-      - label
-      - description
-      - cta
-      - mode
-      properties:
-        id:
-          $ref: '#/components/schemas/OnboardingPathId'
-        label:
-          type: string
-        description:
-          type: string
-        cta:
-          type: string
-        mode:
-          $ref: '#/components/schemas/OnboardingMode'
+        data:
+          type: object
+          required:
+          - flow
+          - session
+          - leadToken
+          - schema
+          - answers
+          properties:
+            flow:
+              $ref: '#/components/schemas/OnboardingSession'
+            session:
+              $ref: '#/components/schemas/OnboardingSession'
+            leadToken:
+              type: string
+            schema:
+              $ref: '#/components/schemas/OnboardingSchema'
+            answers:
+              $ref: '#/components/schemas/Answers'
+            errors:
+              type: object
+              additionalProperties:
+                type: string
+            checkoutUrl:
+              anyOf:
+              - type: string
+                format: uri
+              - type: 'null'
+            identityRestartRequired:
+              type: boolean
+            nextStep:
+              type: string
     OnboardingPathId:
       type: string
       enum:
@@ -1231,72 +1350,13 @@ components:
       - platform
       - other
       description: Public onboarding path id. Prefer `/onboard?type={id}` for new human links. Legacy `/onboard#{id}` and `/onboard#{id}-{payment_plan_tier}` links remain supported.
-    Answers:
+    ErrorEnvelope:
       type: object
-      additionalProperties:
-        anyOf:
-        - type: string
-        - type: number
-        - type: boolean
-        - type: array
-          items:
-            type: string
-        - type: 'null'
-      example:
-        email: name@example.com
-        npi: 10-digit NPI
-        first_name: First name
-        last_name: Last name
-        company: Practice name
-        phone_number: (555) 555-1234
-        fax_number: (555) 555-1234
-        specialty: Psychiatry, Primary Care, Dermatology
-        prescription_volume: 1-5 / month
-        practice_type: Solo practice
-        use_case: How do you expect to use Photon?
-        prescribing_interface: DoseSpot
-        prescribing_interface_other: Tell us what you use today
-        address_street1: Practice street address
-        address_street2: Suite or unit
-        address_city: City
-        address_state: AL
-        address_postal_code: ZIP code
-        job_title: Role or title
-        app_domain: https://example.com
-        integration_type:
-        - app
-        tech_stack: e.g. React, Node, Postgres
-        implementation_timeline: Today
-        care_model: Urgent care, pediatrics, weight loss, etc.
-        provider_count: 1-5
-        site_count: 1-10
-        prescriber_count: 1-100
-        pharmacy_services:
-        - On-Site
-        product_category: EHR, clinical workflow tool, care delivery platform
-        customer_org_count: 1-10
-        terms_of_service_accepted_at: '2026-05-25T12:00:00.000Z'
-        business_associate_agreement_accepted_at: '2026-05-25T12:00:00.000Z'
-    TrackingSummary:
-      type: object
-      additionalProperties: true
+      required:
+      - error
       properties:
-        source:
+        error:
           type: string
-        medium:
-          type: string
-        campaign:
-          type: string
-        referrer:
-          type: string
-        landingPath:
-          type: string
-    OnboardingMode:
-      type: string
-      enum:
-      - self_serve
-      - verification_required
-      - sales_led
     OnboardingField:
       type: object
       required:
@@ -1341,13 +1401,21 @@ components:
               type: string
             value:
               type: string
-    ErrorEnvelope:
+    SubmitRequest:
       type: object
-      required:
-      - error
+      additionalProperties: false
       properties:
-        error:
+        answers:
+          $ref: '#/components/schemas/Answers'
+        draftState:
+          anyOf:
+          - $ref: '#/components/schemas/OnboardingSession'
+          - type: 'null'
+        leadToken:
           type: string
+        turnstileToken:
+          type: string
+          description: Cloudflare Turnstile token. Required when both Turnstile keys are configured.
     OnboardingSession:
       type: object
       additionalProperties: true
@@ -1431,111 +1499,67 @@ components:
           type: string
         attioPersonRecordId:
           type: string
-    ProvisioningResult:
+    Answers:
       type: object
-      additionalProperties: true
-      properties:
-        status:
-          type: string
-          enum:
-          - completed
-          - failed
-          - handoff_required
-          - pending
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties: true
-          properties:
-            invite:
-              type: object
-              additionalProperties: true
-              properties:
-                id:
-                  type: string
-                email:
-                  type: string
-                  format: email
-                url:
-                  type: string
-                  format: uri
-    ValidationErrorEnvelope:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          required:
-          - flow
-          - session
-          - errors
-          properties:
-            flow:
-              $ref: '#/components/schemas/OnboardingSession'
-            session:
-              $ref: '#/components/schemas/OnboardingSession'
-            errors:
-              type: object
-              additionalProperties:
-                type: string
-            identityRestartRequired:
-              type: boolean
-            stepId:
-              type: string
-    OnboardingStateEnvelope:
+      additionalProperties:
+        anyOf:
+        - type: string
+        - type: number
+        - type: boolean
+        - type: array
+          items:
+            type: string
+        - type: 'null'
+      example:
+        email: name@example.com
+        npi: 10-digit NPI
+        first_name: First name
+        last_name: Last name
+        company: Practice name
+        phone_number: (555) 555-1234
+        fax_number: (555) 555-1234
+        specialty: Psychiatry, Primary Care, Dermatology
+        prescription_volume: 1-5 / month
+        practice_type: Solo practice
+        use_case: How do you expect to use Photon?
+        prescribing_interface: DoseSpot
+        prescribing_interface_other: Tell us what you use today
+        address_street1: Practice street address
+        address_street2: Suite or unit
+        address_city: City
+        address_state: AL
+        address_postal_code: ZIP code
+        job_title: Role or title
+        app_domain: https://example.com
+        integration_type:
+        - app
+        tech_stack: e.g. React, Node, Postgres
+        implementation_timeline: Today
+        care_model: Urgent care, pediatrics, weight loss, etc.
+        provider_count: 1-5
+        site_count: 1-10
+        prescriber_count: 1-100
+        pharmacy_services:
+        - On-Site
+        product_category: EHR, clinical workflow tool, care delivery platform
+        customer_org_count: 1-10
+        terms_of_service_accepted_at: '2026-05-25T12:00:00.000Z'
+        business_associate_agreement_accepted_at: '2026-05-25T12:00:00.000Z'
+    OnboardingStep:
       type: object
       required:
-      - data
+      - id
+      - title
+      - fields
       properties:
-        data:
-          type: object
-          required:
-          - flow
-          - session
-          - leadToken
-          - schema
-          - answers
-          properties:
-            flow:
-              $ref: '#/components/schemas/OnboardingSession'
-            session:
-              $ref: '#/components/schemas/OnboardingSession'
-            leadToken:
-              type: string
-            schema:
-              $ref: '#/components/schemas/OnboardingSchema'
-            answers:
-              $ref: '#/components/schemas/Answers'
-            errors:
-              type: object
-              additionalProperties:
-                type: string
-            checkoutUrl:
-              anyOf:
-              - type: string
-                format: uri
-              - type: 'null'
-            identityRestartRequired:
-              type: boolean
-            nextStep:
-              type: string
-    SubmitRequest:
-      type: object
-      additionalProperties: false
-      properties:
-        answers:
-          $ref: '#/components/schemas/Answers'
-        draftState:
-          anyOf:
-          - $ref: '#/components/schemas/OnboardingSession'
-          - type: 'null'
-        leadToken:
+        id:
           type: string
-        turnstileToken:
+        title:
           type: string
-          description: Cloudflare Turnstile token. Required when both Turnstile keys are configured.
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnboardingField'
     OnboardingFullPath:
       type: object
       required:
@@ -1570,30 +1594,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OnboardingStep'
-    SaveStepRequest:
-      type: object
-      required:
-      - stepId
-      additionalProperties: false
-      properties:
-        stepId:
-          type: string
-        action:
-          type: string
-          enum:
-          - save
-          - advance
-          default: save
-        values:
-          $ref: '#/components/schemas/Answers'
-        existingAnswers:
-          $ref: '#/components/schemas/Answers'
-        draftState:
-          anyOf:
-          - $ref: '#/components/schemas/OnboardingSession'
-          - type: 'null'
-        leadToken:
-          type: string
   responses:
     OnboardingStateResponse:
       description: Current onboarding session state.
