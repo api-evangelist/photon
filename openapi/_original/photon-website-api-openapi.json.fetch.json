@@ -1,0 +1,12 @@
+{
+ "url": "https://photonhealth.com/openapi.json",
+ "requested_url": "https://photonhealth.com/openapi.json",
+ "status": 200,
+ "content_type": "application/vnd.oai.openapi+json; charset=utf-8",
+ "bytes": 37226,
+ "sha256": "ab555c915b8030fda221d6841df00880c65d64c904e5e4d3bdd10cc7c09868a6",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
