@@ -65,3 +65,9 @@ components:
 externalDocs:
   description: Photon developer documentation
   url: https://docs.photon.health/docs
+x-provenance:
+  method: harvested
+  publisher: Photon
+  source: https://photonhealth.com/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
